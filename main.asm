@@ -16,26 +16,26 @@ Start:
 	; Turn off LCD
 .waitVBlank
 	ld a, [rLY]
-	cp 144 ; are we past VBlank
+	cp SCRN_Y ; are we past VBlank
 	jr c, .waitVBlank
 
 	; set rLCDC to 0
-	xor a; ld a, 0; equivalent
+	xor a; ld a, 0
 	ld [rLCDC], a
 
 	; Set Font Tileset
-	ld hl, $9000 ; VRAM location of Tilesets
+	ld hl, _VRAM + $1000 ; BG Character Data is after Object Character Data
 	ld de, FontTiles
 	ld bc, FontTilesEnd - FontTiles
 	call Memcpy
 
-	; Write Hello World to the top left of the screen
-	ld hl, $9800 ; VRAM location of the top left part of the screen
+	; Write Hello World to Screen0
+	ld hl, _SCRN0
 	ld de, HelloWorldStr
 	call StrCpy
 
 	; Init display registers
-	ld a, %11100100
+	ld a, %11100100 ; 11 10 01 00 simple color palette
 	ld [rBGP], a
 
 	xor a ; ld a, 0
@@ -46,7 +46,7 @@ Start:
 	ld [rNR52], a
 
 	; Turn screen on, display background
-	ld a, %10000001
+	ld a, LCDCF_ON | LCDCF_BGON
 	ld [rLCDC], a
 
 	; Lock loop
