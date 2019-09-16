@@ -24,27 +24,15 @@ Start:
 	ld [rLCDC], a
 
 	; Set Font Tileset
-	ld hl, $9000
-	ld bc, FontTiles
-	ld de, FontTilesEnd - FontTiles
-.copyFont
-	ld a, [bc]
-	ld [hli], a ; hli increments hl after use
-	inc bc
-	dec de
-	ld a, d
-	or c
-	jr nz, .copyFont
+	ld hl, $9000 ; VRAM location of Tilesets
+	ld de, FontTiles
+	ld bc, FontTilesEnd - FontTiles
+	call Memcpy
 
-
-	ld hl, $9800 ; location of the top left part of the screen
-	ld bc, HelloWorldStr
-.copyString
-	ld a, [bc]
-	ld [hli], a
-	inc bc
-	and a ; test if zero
-	jr nz, .copyString
+	; Write Hello World to the top left of the screen
+	ld hl, $9800 ; VRAM location of the top left part of the screen
+	ld de, HelloWorldStr
+	call StrCpy
 
 	; Init display registers
 	ld a, %11100100
@@ -61,10 +49,40 @@ Start:
 	ld a, %10000001
 	ld [rLCDC], a
 
-
-	; Lock
+	; Lock loop
 .lock
 	jr .lock
+
+
+	; --- Memcpy ---
+	; @param hl ; address to copy to ; return address after data copy
+	; @param de ; address to copy from ; return address after data copy
+	; @param bc ; byte size of data to copy ; return 0
+	; @flags ; a = 0 ; C const ; H unk ; N- ; Z set
+Memcpy:
+	ld a, [de]
+	ld [hli], a ; hli increments hl after use
+	inc de
+	dec bc
+	ld a, b
+	or c
+	jr nz, Memcpy
+	ret
+	; --- End Memcpy ---
+
+
+	; --- StrCpy ---
+	; @param hl ; address to copy to ; return address after data copy
+	; @param de ; address to copy from ; return address after data copy
+	; @flags ; a = 0 ; C const ; H unk ; N+ ; Z set
+StrCpy:
+	ld a, [de]
+	ld [hli], a
+	inc de
+	and a ; test if zero
+	jr nz, StrCpy
+	ret
+	; --- End StrCpy ---
 
 
 SECTION "FONT", ROM0

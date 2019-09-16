@@ -67,7 +67,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <NMakeBuildCommandLine>rgbasm.exe -o "$(IntDir)main.o" "$(ProjectDir)main.asm" &amp;&amp; rgblink.exe -o "$(OutDir)$(TargetName).gb" "$(IntDir)main.o" &amp;&amp; rgbfix.exe -v -p 0 "$(OutDir)$(TargetName).gb"</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine>"$(ProjectDir)Tools\rgbasm.exe" -o "$(IntDir)main.o" "$(ProjectDir)main.asm" &amp;&amp; "$(ProjectDir)Tools\rgblink.exe" -o "$(OutDir)$(TargetName).gb" "$(IntDir)main.o" &amp;&amp; "$(ProjectDir)Tools\rgbfix.exe" -v -p 0 "$(OutDir)$(TargetName).gb"</NMakeBuildCommandLine>
     <NMakeOutput>Project.gb</NMakeOutput>
     <NMakeCleanCommandLine>
     </NMakeCleanCommandLine>
@@ -77,7 +77,7 @@
     </NMakeIncludeSearchPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <NMakeBuildCommandLine>rgbasm.exe -o "$(IntDir)main.o" "$(ProjectDir)main.asm" &amp;&amp; rgblink.exe -o "$(OutDir)$(TargetName).gb" "$(IntDir)main.o" &amp;&amp; rgbfix.exe -v -p 0 "$(OutDir)$(TargetName).gb"</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine>"$(ProjectDir)Tools\rgbasm.exe" -o "$(IntDir)main.o" "$(ProjectDir)main.asm" &amp;&amp; "$(ProjectDir)Tools\rgblink.exe" -o "$(OutDir)$(TargetName).gb" "$(IntDir)main.o" &amp;&amp; "$(ProjectDir)Tools\rgbfix.exe" -v -p 0 "$(OutDir)$(TargetName).gb"</NMakeBuildCommandLine>
     <NMakeOutput>Project.gb</NMakeOutput>
     <NMakeCleanCommandLine>
     </NMakeCleanCommandLine>
