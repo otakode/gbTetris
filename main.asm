@@ -35,7 +35,7 @@ Start:
 	call StrCpy
 
 	; Init display registers
-	ld a, %11100100 ; 11 10 01 00 simple color palette
+	ld a, %11100100 ; 11 10 01 00 simple dark to light color palette
 	ld [rBGP], a
 
 	xor a ; ld a, 0
