@@ -49,9 +49,19 @@ Start:
 	ld a, LCDCF_ON | LCDCF_BGON
 	ld [rLCDC], a
 
-	; Lock loop
-.lock
-	jr .lock
+Main:
+	; Refresh Inputs
+	; Game processing
+.waitVBlank
+	Halt
+	nop ; required after a halt
+
+	ld a, [rIE]
+	and a
+	jr z, .waitVBlank
+	xor a
+	ld [rIE], a
+	jr Main
 
 
 	; --- Memcpy ---
