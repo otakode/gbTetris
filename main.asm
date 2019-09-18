@@ -50,23 +50,18 @@ Start:
 	ld [rLCDC], a
 
 Main:
-	; Refresh Inputs
 	; Game processing
 	call Game
 .waitVBlank
 	; Set the VBlank Interrupt
-	ld a, IEF_VBLANK
+	ld a, [rIE]
+	or IEF_VBLANK ; add VBlank to the Interrupt mask
 	ld [rIE], a
 
 	; Halt until next interrupt
 	Halt
 	nop ; required after a halt
 
-	ld a, [rIE]
-	and a
-	jr z, .waitVBlank
-	xor a
-	ld [rIE], a
 	jr Main
 
 INCLUDE "game.asm"
