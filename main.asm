@@ -53,6 +53,11 @@ Main:
 	; Refresh Inputs
 	; Game processing
 .waitVBlank
+	; Set the VBlank Interrupt
+	ld a, IEF_VBLANK
+	ld [rIE], a
+
+	; Halt until next interrupt
 	Halt
 	nop ; required after a halt
 
