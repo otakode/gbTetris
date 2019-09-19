@@ -30,11 +30,3 @@ StrCpy:
 	ret
 	; --- End StrCpy ---
 
-	; --- AddIEFlag ---
-	; @param b ; flag value(s) to add to the IE mask
-	; @flags ; a = state of the interrupt mask ; C = 0 ; H = 0 ; N = 0 ; Z = a
-AddIEFlag:
-	ld a, [rIE]
-	or b ; add flag to the Interrupt mask
-	ld [rIE], a
-	ret

@@ -23,16 +23,7 @@ Start:
 	xor a; ld a, 0
 	ld [rLCDC], a
 
-	; Set Font Tileset
-	ld hl, _VRAM + $1000 ; BG Character Data is after Object Character Data
-	ld de, FontTiles
-	ld bc, FontTilesEnd - FontTiles
-	call Memcpy
-
-	; Write Hello World to Screen0
-	ld hl, _SCRN0
-	ld de, HelloWorldStr
-	call StrCpy
+	call Init
 
 	; Init display registers
 	ld a, %11100100 ; 11 10 01 00 simple dark to light color palette
@@ -54,8 +45,9 @@ Main:
 	call Game
 .waitVBlank
 	; Set the VBlank Interrupt
-	ld b, IEF_VBLANK
-	call AddIEFlag
+	; ld a, [rIE]
+	; or IEF_VBLANK
+	; ld [rIE], a
 
 	; Halt until next interrupt
 	Halt
