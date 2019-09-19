@@ -54,9 +54,8 @@ Main:
 	call Game
 .waitVBlank
 	; Set the VBlank Interrupt
-	ld a, [rIE]
-	or IEF_VBLANK ; add VBlank to the Interrupt mask
-	ld [rIE], a
+	ld b, IEF_VBLANK
+	call AddIEFlag
 
 	; Halt until next interrupt
 	Halt
