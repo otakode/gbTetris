@@ -1,6 +1,7 @@
 ; Global Variables
-counter EQU _RAM + 0
-secCounter EQU _RAM + 1
+counter EQU _RAM + 0 ; end +1
+secCounter EQU _RAM + 1 ; end +2
+string EQU _RAM + 2 ; end +6
 
 	; --- Init ---
 Init:
@@ -10,7 +11,7 @@ Init:
 	ld bc, FontTilesEnd - FontTiles
 	call Memcpy
 
-	; set Timer
+	; set Timer to 16Hz interruptions (lowest possible)
 	; set TMA
 	ld a, $00 ; overflow at 256th timer
 	ld [rTMA], a
@@ -61,7 +62,7 @@ ProcessTimer:
 	ld a, [counter]
 	add 1
 	ld [counter], a
-	xor 16
+	sub 16
 	ret nz
 
 	ld [counter], a ; reset counter
@@ -81,12 +82,16 @@ ProcessVBlank:
 	or IEF_VBLANK
 	ld [rIE], a
 
+	ld hl, _SCRN0 + SCRN_X_B - 1 ; top right of the screen
 	ld a, [secCounter]
 
-	daa
 	ld b, a
+	; and $0F
 
-	ld hl, _SCRN0 + SCRN_X_B - 1 ; top right of the screen
+	daa
+	swap a
+	ld c, a
+	swap a
 
 	and $0F
 	add "0"
@@ -94,6 +99,18 @@ ProcessVBlank:
 
 	ld a, b
 	swap a
+	and $0F
+	add c
+
+	daa
+
+	and $0F
+	add "0"
+	ld [hld], a
+
+	ld a, b
+	swap a
+
 	and $0F
 	add "0"
 	ld [hld], a

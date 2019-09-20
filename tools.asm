@@ -30,3 +30,11 @@ StrCpy:
 	ret
 	; --- End StrCpy ---
 
+
+	; --- R8ToStr ---
+	; @param hl ; address to write string to (max 4 chars) ; return address to null character ending the string
+	; @param d ; value of the number ; return 
+	; @flags ; a? ; C? ; H? ; N? ; Z?
+R8ToStr:
+	ret
+	; --- End WriteDecR8 ---
