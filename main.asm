@@ -40,20 +40,17 @@ Start:
 	ld a, LCDCF_ON | LCDCF_BGON
 	ld [rLCDC], a
 
+	; --- Main ---
 Main:
 	; Game processing
 	call Game
 .waitVBlank
-	; Set the VBlank Interrupt
-	; ld a, [rIE]
-	; or IEF_VBLANK
-	; ld [rIE], a
-
 	; Halt until next interrupt
 	Halt
 	nop ; required after a halt
 
 	jr Main
+	; --- End Main ---
 
 INCLUDE "game.asm"
 
