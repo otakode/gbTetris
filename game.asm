@@ -46,8 +46,7 @@ Init:
 	ld [rLCDC], a
 
 	; set Interrupts
-	ld a, [rIE]
-	or IEF_TIMER | IEF_VBLANK
+	ld a, IEF_TIMER | IEF_VBLANK
 	ld [rIE], a
 
 	; set Timer to 16Hz interruptions (lowest possible)
@@ -68,11 +67,11 @@ Init:
 
 	; --- Game ---
 Game:
-	ld hl, sTimer
 	ld a, [wTimeSec]
-	ld d, a
-	ld a, [wTimeSec + 1]
 	ld e, a
+	ld a, [wTimeSec + 1]
+	ld d, a
+	ld hl, sTimer
 
 	call R16ToStr
 

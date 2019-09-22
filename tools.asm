@@ -33,8 +33,8 @@ StrCpy:
 
 
 	; --- R8ToStr ---
-	; @param hl ; address to write string to (3 chars + null) ; return address to the character at the start of the string
-	; @param d ; value of the number ; return unchanged
+	; @param hl ; address to write string to (1-3 chars + null) ; return address after the string
+	; @param e ; value of the number ; return unchanged
 	; @flags ; a? ; C? ; H? ; N? ; Z?
 R8ToStr:
 	; just write in hexadecimal for now...
@@ -49,7 +49,7 @@ R8ToStr:
 
 
 	; --- R16ToStr ---
-	; @param hl ; address to write string to (5 chars + null) ; return address to the character at the start of the string
+	; @param hl ; address to write string to (1-5 chars + null) ; return address after the string
 	; @param de ; value of the number ; return unchanged
 	; @flags ; a? ; C? ; H? ; N? ; Z?
 R16ToStr:
@@ -66,10 +66,10 @@ R16ToStr:
 
 	; --- R8ToHexStr ---
 	; @param hl ; address to write string to (2 chars) ; return address to the character at the start of the string
-	; @param d ; value of the number ; return unchanged
+	; @param e ; value of the number ; return unchanged
 	; @flags ; a = last character ; C = is last character a letter ; H = C ; N = true ; Z = false
 R8ToHexStr:
-	ld a, d
+	ld a, e
 	swap a
 	and $0F
 	cp $0A
@@ -79,7 +79,7 @@ R8ToHexStr:
 	add "0"
 	ldi [hl], a
 
-	ld a, d
+	ld a, e
 	and $0F
 	cp $0A
 	jr c, .notHex2
@@ -97,7 +97,7 @@ R8ToHexStr:
 	; @param de ; value of the number ; return unchanged
 	; @flags ; a = last character ; C = is last character a letter ; H = C ; N = true ; Z = false
 R16ToHexStr:
-	ld a, e
+	ld a, d
 	swap a
 	and $0F
 	cp $0A
@@ -107,7 +107,7 @@ R16ToHexStr:
 	add "0"
 	ldi [hl], a
 
-	ld a, e
+	ld a, d
 	and $0F
 	cp $0A
 	jr c, .notHex2
@@ -116,7 +116,7 @@ R16ToHexStr:
 	add "0"
 	ldi [hl], a
 
-	ld a, d
+	ld a, e
 	swap a
 	and $0F
 	cp $0A
@@ -126,7 +126,7 @@ R16ToHexStr:
 	add "0"
 	ldi [hl], a
 
-	ld a, d
+	ld a, e
 	and $0F
 	cp $0A
 	jr c, .notHex4
