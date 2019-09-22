@@ -7,11 +7,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <None Include="data.asm" />
     <None Include="font.chr" />
     <None Include="game.asm" />
+    <None Include="handlers.asm" />
     <None Include="hardware.inc" />
+    <None Include="interrupts.asm" />
     <None Include="main.asm" />
     <None Include="tools.asm" />
+    <None Include="variables.asm" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{60264ADC-B9A1-4DF0-B8EE-C7C1A3215259}</ProjectGuid>
