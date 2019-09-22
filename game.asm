@@ -73,7 +73,7 @@ Game:
 	ld d, a
 	ld hl, sTimer
 
-	call R16ToStr
+	call R8ToStr
 
 	ret
 	; --- End Game ---

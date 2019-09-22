@@ -34,13 +34,41 @@ StrCpy:
 
 	; --- R8ToStr ---
 	; @param hl ; address to write string to (1-3 chars + null) ; return address after the string
-	; @param e ; value of the number ; return unchanged
+	; @param e ; value of the number ; return 0
+	; @param b ; output only ; return length of the string
 	; @flags ; a? ; C? ; H? ; N? ; Z?
 R8ToStr:
-	; just write in hexadecimal for now...
-	ld [hl], "0"
-	inc hl
-	call R8ToHexStr
+
+	ld b, "0"
+	ld a, e
+.hundred
+	cp 100
+	jr c, .afterHundred
+	sub a, 100
+	inc b
+	jr .hundred
+.afterHundred
+	ld e, a
+	ld a, b
+	ldi [hl], a
+
+	ld b, "0"
+	ld a, e
+.ten
+	cp 10
+	jr c, .afterTen
+	sub a, 10
+	inc b
+	jr .ten
+.afterTen
+	ld e, a
+	ld a, b
+	ldi [hl], a
+
+	ld a, e
+	add "0"
+	ldi [hl], a
+
 	ld [hl], 0
 	inc hl
 
