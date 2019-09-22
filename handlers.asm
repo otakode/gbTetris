@@ -25,7 +25,8 @@ ProcessTimer:
 	ld a, [wTimeSec]
 	inc a
 	ld [wTimeSec], a
-	ret nc
+	cp a, $00
+	ret nz
 
 	; increment high byte value for wTimeSec
 	ld a, [wTimeSec + 1]
