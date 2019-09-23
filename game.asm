@@ -24,11 +24,6 @@ Init:
 	ld bc, FontTilesEnd - FontTiles
 	call Memcpy
 
-	ld hl, sTimer
-	ld de, sTimerInit
-	call StrCpy
-	ld [hl], 0
-
 	; Init display registers
 	ld a, %11100100 ; 11 10 01 00 simple dark to light color palette
 	ld [rBGP], a
@@ -67,13 +62,6 @@ Init:
 
 	; --- Game ---
 Game:
-	ld a, [wTimeSec]
-	ld e, a
-	ld a, [wTimeSec + 1]
-	ld d, a
-	ld hl, sTimer
-
-	call R8ToStr
 
 	ret
 	; --- End Game ---

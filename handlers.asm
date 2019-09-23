@@ -3,9 +3,32 @@ SECTION "Interruption Handlers", ROM0
 
 	; --- ProcessVBlank ---
 ProcessVBlank:
-	ld hl, _SCRN0 + SCRN_X_B - (sTimerEnd - sTimer) ; top right of the screen
-	ld de, sTimer
-	call StrCpy
+	ld hl, _SCRN0 + SCRN_X_B - 1 ; top right of the screen
+	ld de, wTimeSec
+
+	ld a, [de]
+	and a, $0F
+	add "0"
+	ldd [hl], a
+
+	ld a, [de]
+	swap a
+	and a, $0F
+	add "0"
+	ldd [hl], a
+
+	inc de
+
+	ld a, [de]
+	and a, $0F
+	add "0"
+	ldd [hl], a
+
+	ld a, [de]
+	swap a
+	and a, $0F
+	add "0"
+	ld [hl], a
 
 	ret
 	; --- End ProcessVBlank ---
@@ -24,13 +47,14 @@ ProcessTimer:
 	; increment Seconds counter
 	ld a, [wTimeSec]
 	inc a
+	daa
 	ld [wTimeSec], a
-	cp a, $00
-	ret nz
+	ret nc
 
 	; increment high byte value for wTimeSec
 	ld a, [wTimeSec + 1]
 	add 1
+	daa
 	ld [wTimeSec + 1], a
 
 	ret

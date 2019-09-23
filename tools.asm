@@ -32,66 +32,6 @@ StrCpy:
 	; --- End StrCpy ---
 
 
-	; --- R8ToStr ---
-	; @param hl ; address to write string to (1-3 chars + null) ; return address after the string
-	; @param e ; value of the number ; return 0
-	; @param b ; output only ; return length of the string
-	; @flags ; a? ; C? ; H? ; N? ; Z?
-R8ToStr:
-
-	ld b, "0"
-	ld a, e
-.hundred
-	cp 100
-	jr c, .afterHundred
-	sub a, 100
-	inc b
-	jr .hundred
-.afterHundred
-	ld e, a
-	ld a, b
-	ldi [hl], a
-
-	ld b, "0"
-	ld a, e
-.ten
-	cp 10
-	jr c, .afterTen
-	sub a, 10
-	inc b
-	jr .ten
-.afterTen
-	ld e, a
-	ld a, b
-	ldi [hl], a
-
-	ld a, e
-	add "0"
-	ldi [hl], a
-
-	ld [hl], 0
-	inc hl
-
-	ret
-	; --- End R8ToStr ---
-
-
-	; --- R16ToStr ---
-	; @param hl ; address to write string to (1-5 chars + null) ; return address after the string
-	; @param de ; value of the number ; return unchanged
-	; @flags ; a? ; C? ; H? ; N? ; Z?
-R16ToStr:
-	; just write in hexadecimal for now...
-	ld [hl], "0"
-	inc hl
-	call R16ToHexStr
-	ld [hl], 0
-	inc hl
-
-	ret
-	; --- End R16ToStr ---
-
-
 	; --- R8ToHexStr ---
 	; @param hl ; address to write string to (2 chars) ; return address to the character at the start of the string
 	; @param e ; value of the number ; return unchanged
