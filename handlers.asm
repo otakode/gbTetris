@@ -53,7 +53,7 @@ ProcessTimer:
 
 	; increment high byte value for wTimeSec
 	ld a, [wTimeSec + 1]
-	add 1
+	inc a
 	daa
 	ld [wTimeSec + 1], a
 
