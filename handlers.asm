@@ -34,6 +34,9 @@ ProcessVBlank:
 	; --- End ProcessVBlank ---
 
 
+	; --- No LCDStat ---
+
+
 	; --- ProcessTimer ---
 ProcessTimer:
 	; increment interrupt counter
@@ -59,3 +62,9 @@ ProcessTimer:
 
 	ret
 	; --- End ProcessTimer ---
+
+
+	; --- No Serial ---
+
+
+	; --- No Joypad ---

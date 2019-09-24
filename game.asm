@@ -62,6 +62,19 @@ Init:
 
 	; --- Game ---
 Game:
-
+	call CheckInput
 	ret
 	; --- End Game ---
+
+
+	; --- CheckInputs ---
+CheckInput:
+	ld hl, rP1
+	ld [hl], P1F_4
+	ld a, [hl]
+	swap a
+	ld [hl], P1F_5
+	or a, [hl]
+	ld [bInputState], a
+	ret
+	; --- End CheckInput ---
