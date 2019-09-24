@@ -70,11 +70,23 @@ Game:
 	; --- CheckInputs ---
 CheckInput:
 	ld hl, rP1
-	ld [hl], P1F_4
+
+	ld [hl], ~P1F_4
+REPT 2
 	ld a, [hl]
+ENDR
+	and $0F
 	swap a
-	ld [hl], P1F_5
-	or a, [hl]
+	ld b, a
+
+	ld [hl], ~P1F_5
+REPT 6
+	ld a, [hl]
+ENDR
+	and $0F
+	or b
+	cpl
 	ld [bInputState], a
+
 	ret
 	; --- End CheckInput ---
