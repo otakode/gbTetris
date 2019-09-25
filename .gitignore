@@ -1,6 +1,7 @@
 Build/
 .vs/
 
+*.o
 *.db
 *.opendb
 *.user
