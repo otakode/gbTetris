@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="TileSets">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="TileMap">
+      <UniqueIdentifier>{55489278-6222-43c6-b136-fd9c28a04700}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TileSet\tileSet.gbr">
+      <Filter>TileSets</Filter>
+    </None>
+    <None Include="TileMap\gameboy.gbm">
+      <Filter>TileMap</Filter>
+    </None>
+    <None Include="TileSet\font.chr">
+      <Filter>TileSets</Filter>
+    </None>
+    <None Include="Sources\data.asm">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="Sources\game.asm">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="Sources\handlers.asm">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="Sources\hardware.inc">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="Sources\interrupts.asm">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="Sources\main.asm">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="Sources\tools.asm">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="Sources\variables.asm">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -1,21 +1,31 @@
-# Specify compiler
-CC=gcc
-  
+RGBDS_PATH=..\Tools\rgbds
+OUTDIR=..\Build
+
+# Specify assembler
+AS=$(RGBDS_PATH)\rgbasm.exe
+
 # Specify linker
-LINK=gcc
-  
-.PHONY : all
-all : app
-  
-# Link the object files into a binary
-app : main.o
-    $(LINK) -o app main.o -lstdc++
-  
-# Compile the source files into object files
-main.o : main.cpp
-    $(CC) -c main.cpp -o main.o
-  
+LINK=$(RGBDS_PATH)\rgblink.exe
+
+# Specify fixer
+FIX=$(RGBDS_PATH)\rgbfix.exe
+
+TARGET=$(OUTDIR)\Project.gb
+
+SRC=main.asm
+
+OBJ=$(SRC:.asm=.o)
+
+.asm.o:
+	$(AS) $(AFLAGS) -o $@ $<
+
+all : $(OBJ)
+	$(LINK) -o $(TARGET) $(OBJ)
+	$(FIX) -v -p 0 $(TARGET)
+
 # Clean target
-.PHONY : clean
 clean :
-    rm main.o app 
+	del $(OBJ) $(TARGET)
+
+# Rebuild target
+rebuild : clean all

@@ -3,6 +3,5 @@ Build/
 
 *.db
 *.opendb
-*.filters
 *.user
 *.ini

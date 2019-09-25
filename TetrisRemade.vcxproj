@@ -7,15 +7,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <None Include="data.asm" />
-    <None Include="font.chr" />
-    <None Include="game.asm" />
-    <None Include="handlers.asm" />
-    <None Include="hardware.inc" />
-    <None Include="interrupts.asm" />
-    <None Include="main.asm" />
-    <None Include="tools.asm" />
-    <None Include="variables.asm" />
+    <None Include="Sources\data.asm" />
+    <None Include="Sources\game.asm" />
+    <None Include="Sources\handlers.asm" />
+    <None Include="Sources\hardware.inc" />
+    <None Include="Sources\interrupts.asm" />
+    <None Include="Sources\main.asm" />
+    <None Include="Sources\tools.asm" />
+    <None Include="Sources\variables.asm" />
+    <None Include="TileMap\gameboy.gbm" />
+    <None Include="TileSet\font.chr" />
+    <None Include="TileSet\tileSet.gbr" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{60264ADC-B9A1-4DF0-B8EE-C7C1A3215259}</ProjectGuid>
@@ -37,12 +39,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Build|Win32'">
-    <NMakeBuildCommandLine>"$(ProjectDir)Tools\rgbasm.exe" -o "$(IntDir)main.o" "$(ProjectDir)main.asm" &amp;&amp; "$(ProjectDir)Tools\rgblink.exe" -o "$(OutDir)$(TargetName).gb" "$(IntDir)main.o" &amp;&amp; "$(ProjectDir)Tools\rgbfix.exe" -v -p 0 "$(OutDir)$(TargetName).gb"</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine>cd Sources &amp; nmake /F ../makefile all</NMakeBuildCommandLine>
     <NMakeOutput>Project.gb</NMakeOutput>
-    <NMakeCleanCommandLine>
-    </NMakeCleanCommandLine>
-    <NMakeReBuildCommandLine>
-    </NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>cd Sources &amp; nmake /F ../makefile clean</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>cd Sources &amp; nmake /F ../makefile rebuild</NMakeReBuildCommandLine>
     <NMakeIncludeSearchPath>
     </NMakeIncludeSearchPath>
   </PropertyGroup>
