@@ -37,14 +37,16 @@ StrCpy:
 	; @param de ; address to copy the tilemap from ; return address after the data
 	; @param b ; width of the tilemap ; return b*8
 	; @param c ; height of the tilemap ; return 0
-	; @flags ; a=-1 ; C ; H ; N ; Z
+	; @flags ; a=0 ; C unknown ; H unknown ; N = true ; Z = true
 TileMapCopy:
-	ld a, b ; mul b, 8
-	add a
-	add a
-	add a
-	ld b, a
-.line
+
+.row
+	ld a, c
+	dec c
+	and a
+	ret z
+.col
+	; copy line
 	push bc
 	push hl
 	ld a, b
@@ -54,16 +56,16 @@ TileMapCopy:
 	pop hl
 
 	; next line
-	ld bc, SCRN_VX_B
-	add hl, bc
+	ld a, l
+	add SCRN_VX_B
+	ld l, a
+	ld a, 0
+	adc a, h
+	ld h, a
 	pop bc
 
-	ld a, c
-	dec c
-	cp a, 0
-	jr nz, .line
-
-	ret
+	jr .row
+	;ret
 	; --- End TileMapCopy ---
 
 
