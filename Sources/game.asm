@@ -18,11 +18,24 @@ Init:
 	ld [wTimeSec], a
 	ld [wTimeSec + 1], a
 
-	; Set font tileset
+	; Set GameBoy TileSet
+	ld hl, _VRAM + $800 ; BG Character Data is after Object Character Data
+	ld de, GameBoyTileSet
+	ld bc, GameBoyTileSetEnd - GameBoyTileSet
+	call Memcpy
+
+	; Set Font TileSet
 	ld hl, _VRAM + $1000 ; BG Character Data is after Object Character Data
 	ld de, FontTiles
 	ld bc, FontTilesEnd - FontTiles
 	call Memcpy
+
+	; Set GameBoy TileMap
+	ld hl, _SCRN0
+	ld de, GameBoyTileMap
+	ld b, 20
+	ld c, 18
+	call TileMapCopy
 
 	; Init display registers
 	ld a, %11100100 ; 11 10 01 00 simple dark to light color palette

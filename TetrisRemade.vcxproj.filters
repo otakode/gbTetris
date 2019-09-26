@@ -14,12 +14,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="TileSet\tileSet.gbr">
-      <Filter>TileSets</Filter>
-    </None>
-    <None Include="TileMap\gameboy.gbm">
-      <Filter>TileMap</Filter>
-    </None>
     <None Include="TileSet\font.chr">
       <Filter>TileSets</Filter>
     </None>
@@ -46,6 +40,12 @@
     </None>
     <None Include="Sources\variables.asm">
       <Filter>Source Files</Filter>
+    </None>
+    <None Include="TileSet\GameBoyTileSet.z80">
+      <Filter>TileSets</Filter>
+    </None>
+    <None Include="TileMap\GameBoyTileMap.z80">
+      <Filter>TileMap</Filter>
     </None>
   </ItemGroup>
 </Project>

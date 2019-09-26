@@ -19,8 +19,8 @@ Memcpy:
 
 
 	; --- StrCpy ---
-	; @param hl ; address to copy to ; return address after data copy
-	; @param de ; address to copy from ; return address after data copy
+	; @param hl ; address to copy to ; return address after data copied to
+	; @param de ; address to copy from ; return address after data copied from
 	; @flags ; a = 0 ; C unchanged ; H unchanged ; N = true ; Z = true
 StrCpy:
 	ld a, [de]
@@ -30,6 +30,41 @@ StrCpy:
 	jr nz, StrCpy
 	ret
 	; --- End StrCpy ---
+
+
+	; --- TileMapCopy ---
+	; @param hl ; address to copy the tilemap to ; return address below the bottom left tile (can be Out of Bounds)
+	; @param de ; address to copy the tilemap from ; return address after the data
+	; @param b ; width of the tilemap ; return b*8
+	; @param c ; height of the tilemap ; return 0
+	; @flags ; a=-1 ; C ; H ; N ; Z
+TileMapCopy:
+	ld a, b ; mul b, 8
+	add a
+	add a
+	add a
+	ld b, a
+.line
+	push bc
+	push hl
+	ld a, b
+	ld c, a
+	ld b, 0
+	call Memcpy
+	pop hl
+
+	; next line
+	ld bc, SCRN_VX_B
+	add hl, bc
+	pop bc
+
+	ld a, c
+	dec c
+	cp a, 0
+	jr nz, .line
+
+	ret
+	; --- End TileMapCopy ---
 
 
 	; --- R8ToHexStr ---

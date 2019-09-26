@@ -3,6 +3,7 @@ SECTION "Interruption Handlers", ROM0
 
 	; --- ProcessVBlank ---
 ProcessVBlank:
+	ret
 	ld hl, _SCRN0 + SCRN_X_B - 1 ; top right of the screen
 	ld de, wTimeSec
 

@@ -15,9 +15,9 @@
     <None Include="Sources\main.asm" />
     <None Include="Sources\tools.asm" />
     <None Include="Sources\variables.asm" />
-    <None Include="TileMap\gameboy.gbm" />
+    <None Include="TileMap\GameBoyTileMap.z80" />
     <None Include="TileSet\font.chr" />
-    <None Include="TileSet\tileSet.gbr" />
+    <None Include="TileSet\GameBoyTileSet.z80" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{60264ADC-B9A1-4DF0-B8EE-C7C1A3215259}</ProjectGuid>
@@ -39,7 +39,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Build|Win32'">
-    <NMakeBuildCommandLine>cd Sources &amp; nmake /F ../makefile all</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine>cd Sources &amp; nmake /F ../makefile rebuild</NMakeBuildCommandLine>
     <NMakeOutput>Project.gb</NMakeOutput>
     <NMakeCleanCommandLine>cd Sources &amp; nmake /F ../makefile clean</NMakeCleanCommandLine>
     <NMakeReBuildCommandLine>cd Sources &amp; nmake /F ../makefile rebuild</NMakeReBuildCommandLine>
