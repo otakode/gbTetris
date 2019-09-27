@@ -1,4 +1,5 @@
 INCLUDE "hardware.inc"
+INCLUDE "macros.asm"
 
 SECTION "HEADER", ROM0[$100]
 

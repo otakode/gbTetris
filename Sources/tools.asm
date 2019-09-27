@@ -1,6 +1,21 @@
 
 SECTION "Tools Functions", ROM0
 
+	; --- Memzero ---
+	; @param hl ; address to set 0 to ; return address after data copy
+	; @param bc ; byte size of data to set ; return 0
+	; @flags ; a = 0 ; C unchanged ; H unchanged ; N = true ; Z = true
+Memzero:
+	ld a, 0
+	ldi [hl], a
+	dec bc
+	ld a, b
+	or c
+	jr nz, Memzero
+	ret
+	; --- End Memcpy ---
+
+
 	; --- Memcpy ---
 	; @param hl ; address to copy to ; return address after data copy
 	; @param de ; address to copy from ; return address after data copy
@@ -8,7 +23,7 @@ SECTION "Tools Functions", ROM0
 	; @flags ; a = 0 ; C unchanged ; H unchanged ; N = true ; Z = true
 Memcpy:
 	ld a, [de]
-	ld [hli], a ; hli increments hl after use
+	ldi [hl], a
 	inc de
 	dec bc
 	ld a, b

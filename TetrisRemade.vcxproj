@@ -12,6 +12,7 @@
     <None Include="Sources\handlers.asm" />
     <None Include="Sources\hardware.inc" />
     <None Include="Sources\interrupts.asm" />
+    <None Include="Sources\macros.asm" />
     <None Include="Sources\main.asm" />
     <None Include="Sources\tools.asm" />
     <None Include="Sources\variables.asm" />

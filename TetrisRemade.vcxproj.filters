@@ -47,5 +47,8 @@
     <None Include="TileMap\GameBoyTileMap.z80">
       <Filter>TileMap</Filter>
     </None>
+    <None Include="Sources\macros.asm">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
