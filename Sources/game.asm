@@ -77,9 +77,30 @@ Init:
 	; --- End Init ---
 
 
+	; --- CreateGameBoyObjects ---
+CreateGameBoyObjects:
+	SET_SPRITE wDPadUp, 10*8+16, 6*8+8, 1, 0
+	SET_SPRITE wDPadDown, 12*8+16, 6*8+8, 4, 0
+	SET_SPRITE wDPadLeft, 11*8+16, 5*8+8, 2, 0
+	SET_SPRITE wDPadRight, 11*8+16, 7*8+8, 3, 0
+	SET_SPRITE wButtonA, 11*8+16, 14*8+8, 6, 0
+	SET_SPRITE wButtonB, 12*8+16, 12*8+8, 6, 0
+	SET_SPRITE wButtonStart, 15*8+16, 10*8+8, 7, 0
+	SET_SPRITE wButtonSelect, 15*8+16, 8*8+8, 7, 0
+	ld hl, _OAMRAM
+	ld de, wObjects
+	ld bc, wObjectsEnd - wObjects
+	call Memcpy
+	ld bc, $A0 - (wObjectsEnd - wObjects)
+	call Memzero
+	ret
+	; --- End CreateGameBoyObjects ---
+
+
 	; --- Game ---
 Game:
 	call CheckInput
+	call
 	ret
 	; --- End Game ---
 
@@ -109,21 +130,8 @@ ENDR
 	; --- End CheckInput ---
 
 
-	; --- CreateGameBoyObjects ---
-CreateGameBoyObjects:
-	SET_SPRITE wDPadUp, 10*8+16, 6*8+8, 1, 0
-	SET_SPRITE wDPadDown, 12*8+16, 6*8+8, 4, 0
-	SET_SPRITE wDPadLeft, 11*8+16, 5*8+8, 2, 0
-	SET_SPRITE wDPadRight, 11*8+16, 7*8+8, 3, 0
-	SET_SPRITE wButtonA, 11*8+16, 14*8+8, 6, 0
-	SET_SPRITE wButtonB, 12*8+16, 12*8+8, 6, 0
-	SET_SPRITE wButtonStart, 15*8+16, 10*8+8, 7, 0
-	SET_SPRITE wButtonSelect, 15*8+16, 8*8+8, 7, 0
-	ld hl, _OAMRAM
-	ld de, wObjects
-	ld bc, wObjectsEnd - wObjects
-	call Memcpy
-	ld bc, $A0 - (wObjectsEnd - wObjects)
-	call Memzero
+	; --- UpdateObjects ---
+UpdateObjects:
+	; Todo move sprite
 	ret
-	; --- End CreateGameBoyObjects ---
+	; --- End UpdateObjects ---
