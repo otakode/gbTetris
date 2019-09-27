@@ -18,7 +18,7 @@ GameBoyTileMapWidth  EQU 20
 GameBoyTileMapHeight EQU 18
 GameBoyTileMapBank   EQU 0
 
- SECTION "TileMap", HOME
+ SECTION "TileMap", ROM0
 
 GameBoyTileMap::
 DB $08,$08,$08,$08,$0F,$0E,$0E,$0E,$0E,$0E
