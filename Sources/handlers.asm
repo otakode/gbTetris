@@ -3,7 +3,16 @@ SECTION "Interruption Handlers", ROM0
 
 	; --- ProcessVBlank ---
 ProcessVBlank:
+	; Update OAM
+	ld hl, _OAMRAM
+	ld de, Objects
+	ld bc, ObjectsEnd - Objects
+	call Memcpy
+	ld bc, $A0 - (ObjectsEnd - Objects)
+	call Memzero
 	ret
+
+	; Display Timer
 	ld hl, _SCRN0 + SCRN_X_B - 1 ; top right of the screen
 	ld de, wTimeSec
 

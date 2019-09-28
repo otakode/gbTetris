@@ -9,13 +9,13 @@ bTimerIECounter: db ; counter for Timer Interruptions
 
 wTimeSec: dw ; time in seconds (BCD)
 
-wObjects: ; --- Sprite Objects ---
-wDPadUp: SPRITE_OBJECT
-wDPadDown: SPRITE_OBJECT
-wDPadLeft: SPRITE_OBJECT
-wDPadRight: SPRITE_OBJECT
-wButtonA: SPRITE_OBJECT
-wButtonB: SPRITE_OBJECT
-wButtonStart: SPRITE_OBJECT
-wButtonSelect: SPRITE_OBJECT
-wObjectsEnd: ; --- End Sprite Objects ---
+Objects: ; --- Sprite Objects ---
+DPadDown: SPRITE_OBJECT
+DPadUp: SPRITE_OBJECT
+DPadLeft: SPRITE_OBJECT
+DPadRight: SPRITE_OBJECT
+ButtonStart: SPRITE_OBJECT
+ButtonSelect: SPRITE_OBJECT
+ButtonB: SPRITE_OBJECT
+ButtonA: SPRITE_OBJECT
+ObjectsEnd: ; --- End Sprite Objects ---
