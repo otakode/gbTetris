@@ -33,8 +33,7 @@ Init:
 	; Set GameBoy TileMap
 	ld hl, _SCRN0
 	ld de, GameBoyTileMap
-	ld b, 20
-	ld c, 18
+	ld bc, 20 << 8 | 18 ; same as both `ld b, 20` and `ld c, 18`
 	call TileMapCopy
 
 	call InitGameBoyObjects
@@ -138,8 +137,7 @@ UPDATE_BUTTON: MACRO
 	jr z, .then\@
 	\3 a
 .then\@
-	ld hl, \2
-	ld [hl], a
+	ld [\2], a
 ENDM
 
 UpdateObjects:
