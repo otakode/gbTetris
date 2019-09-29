@@ -1,12 +1,43 @@
 
+SECTION "OAM DMA routine", ROM0
+
+
+	; --- CopyDMARoutine ---
+CopyDMARoutine:
+	ld hl, DMARoutine
+	ld b, DMARoutineEnd - DMARoutine ; Number of bytes to copy
+	ld c, LOW(hOAMDMA) ; Low byte of the destination address
+.copy
+	ld a, [hli]
+	ldh [c], a
+	inc c
+	dec b
+	jr nz, .copy
+	ret
+	; --- End CopyDMARoutine ---
+
+
+	; --- DMARoutine ---
+DMARoutine:
+	ldh [rDMA], a
+	ld a, 40
+.wait
+	dec a
+	jr nz, .wait
+	ret
+DMARoutineEnd:
+	; --- End DMARoutine ---
+
+
 SECTION "Tools Functions", ROM0
+
 
 	; --- Memzero ---
 	; @param hl ; address to set 0 to ; return address after data copy
 	; @param bc ; byte size of data to set ; return 0
 	; @flags ; a = 0 ; C unchanged ; H unchanged ; N = true ; Z = true
 Memzero:
-	ld a, 0
+	xor a ; ld a, 0
 	ldi [hl], a
 	dec bc
 	ld a, b

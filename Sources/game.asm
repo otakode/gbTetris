@@ -53,6 +53,9 @@ Init:
 	; No sound
 	ld [rNR52], a
 
+	call CopyDMARoutine
+	call ProcessVBlank ; first frame OAM init
+
 	; Turn screen on, display background
 	ld a, LCDCF_ON | LCDCF_WIN9800 | LCDCF_WINOFF | LCDCF_BG8000 | LCDCF_BG9800 | LCDCF_OBJ8 | LCDCF_OBJON | LCDCF_BGON
 	ld [rLCDC], a
@@ -87,6 +90,9 @@ CreateGameBoyObjects:
 	SET_SPRITE ButtonSelect, 15*8+16, 8*8+8, 7, 0
 	SET_SPRITE ButtonB, 12*8+16, 12*8+8, 6, 0
 	SET_SPRITE ButtonA, 11*8+16, 14*8+8, 6, 0
+	ld hl, ObjectsEnd
+	ld bc, $A0 - (ObjectsEnd - Objects)
+	call Memzero
 	ret
 	; --- End CreateGameBoyObjects ---
 

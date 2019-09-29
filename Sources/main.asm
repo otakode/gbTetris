@@ -1,22 +1,34 @@
 INCLUDE "hardware.inc"
 INCLUDE "macros.asm"
 
+;INCLUDE "rst.asm"
+INCLUDE "interrupts.asm"
+
+
 SECTION "HEADER", ROM0[$100]
 
+
+	; --- EntryPoint ---
 EntryPoint:
 	di
 	jp Start
+	; --- End EntryPoint ---
+
 
 REPT $150 - $104
 	db 0
 ENDR
 
-INCLUDE "interrupts.asm"
 
 SECTION "Main", ROM0
 
+
+	; --- Start ---
 Start:
 	call Init
+	; continue to main
+	; --- End Start ---
+
 
 	; --- Main ---
 Main:
@@ -32,6 +44,7 @@ Main:
 	jr z, .waitVBlank
 	jr Main
 	; --- End Main ---
+
 
 INCLUDE "handlers.asm"
 
