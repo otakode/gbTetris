@@ -5,10 +5,18 @@ SPRITE_OBJECT: MACRO
 .flags db
 ENDM
 
+Y_POS: MACRO
+	\1 * 8 + 16
+ENDM
+
+X_POS: MACRO
+	\1 * 8 + 8
+ENDM
+
 SET_SPRITE: MACRO
-	ld a, \2
+	ld a, \2 + 16
 	ld [\1.y], a
-	ld a, \3
+	ld a, \3 + 8
 	ld [\1.x], a
 	ld a, \4
 	ld [\1.tile], a

@@ -3,7 +3,7 @@ SECTION "Interruption Handlers", ROM0
 
 	; --- ProcessVBlank ---
 ProcessVBlank:
-	ld a, HIGH(Objects)
+	ld a, HIGH(wShadowOAM)
 	call hOAMDMA
 	ret
 	; --- End ProcessVBlank ---
@@ -15,13 +15,13 @@ ProcessVBlank:
 	; --- ProcessTimer ---
 ProcessTimer:
 	; increment interrupt counter
-	ld a, [bTimerIECounter]
+	ld a, [wTimerIECounter]
 	inc a
-	ld [bTimerIECounter], a
+	ld [wTimerIECounter], a
 	sub 16
 	ret nz
 
-	ld [bTimerIECounter], a ; reset counter
+	ld [wTimerIECounter], a ; reset counter
 	; increment Seconds counter
 	ld a, [wTimeSec]
 	inc a
