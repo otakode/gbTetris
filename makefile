@@ -10,7 +10,9 @@ LINK=$(RGBDS_PATH)\rgblink.exe
 # Specify fixer
 FIX=$(RGBDS_PATH)\rgbfix.exe
 
-TARGET=$(OUTDIR)\Project.gb
+TARGET_NAME=Project
+TARGET=$(OUTDIR)\$(TARGET_NAME).gb
+SYM=$(OUTDIR)\$(TARGET_NAME).sym
 
 SRC=main.asm
 
@@ -20,7 +22,7 @@ OBJ=$(SRC:.asm=.o)
 	$(AS) $(AFLAGS) -o $@ $<
 
 all : $(OBJ)
-	$(LINK) -o $(TARGET) $(OBJ)
+	$(LINK) -o $(TARGET) -n $(SYM) $(OBJ)
 	$(FIX) -v -p 0 $(TARGET)
 
 # Clean target
