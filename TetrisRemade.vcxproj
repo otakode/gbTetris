@@ -42,10 +42,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Build|Win32'">
-    <NMakeBuildCommandLine>cd Sources &amp; nmake /F ../makefile rebuild</NMakeBuildCommandLine>
-    <NMakeOutput>Project.gb</NMakeOutput>
-    <NMakeCleanCommandLine>cd Sources &amp; nmake /F ../makefile clean</NMakeCleanCommandLine>
-    <NMakeReBuildCommandLine>cd Sources &amp; nmake /F ../makefile rebuild</NMakeReBuildCommandLine>
+    <NMakeBuildCommandLine>nmake rebuild</NMakeBuildCommandLine>
+    <NMakeOutput>TetrisRemade.gb</NMakeOutput>
+    <NMakeCleanCommandLine>nmake clean</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>nmake rebuild</NMakeReBuildCommandLine>
     <NMakeIncludeSearchPath>
     </NMakeIncludeSearchPath>
   </PropertyGroup>

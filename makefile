@@ -1,24 +1,29 @@
-RGBDS_PATH=..\Tools\rgbds
-OUTDIR=..\Build
+RGBDS_PATH = Tools\rgbds\ 
+SRC_PATH = Sources\ 
+BUILD_PATH = Build\ 
+
+# Specify remover
+RM = del
 
 # Specify assembler
-AS=$(RGBDS_PATH)\rgbasm.exe
+AS = $(RGBDS_PATH)rgbasm.exe
+AFLAGS = -i $(SRC_PATH)
 
 # Specify linker
-LINK=$(RGBDS_PATH)\rgblink.exe
+LINK = $(RGBDS_PATH)rgblink.exe
 
 # Specify fixer
-FIX=$(RGBDS_PATH)\rgbfix.exe
+FIX = $(RGBDS_PATH)rgbfix.exe
 
 TARGET_NAME=Project
-TARGET=$(OUTDIR)\$(TARGET_NAME).gb
-SYM=$(OUTDIR)\$(TARGET_NAME).sym
+TARGET = $(BUILD_PATH)$(TARGET_NAME).gb
+SYM = $(BUILD_PATH)$(TARGET_NAME).sym
 
-SRC=main.asm
+SRC = main.asm
 
-OBJ=$(SRC:.asm=.o)
+OBJ = $(BUILD_PATH)$(SRC:.asm=.o)
 
-.asm.o:
+{$(SRC_PATH)}.asm{$(BUILD_PATH)}.o:
 	$(AS) $(AFLAGS) -o $@ $<
 
 all : $(OBJ)
@@ -27,7 +32,7 @@ all : $(OBJ)
 
 # Clean target
 clean :
-	del $(OBJ) $(TARGET)
+#	$(RM) $(OBJ) $(TARGET)
 
 # Rebuild target
 rebuild : clean all
