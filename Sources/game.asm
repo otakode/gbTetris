@@ -1,15 +1,73 @@
 
 SECTION "Game", ROM0
 
+
+	; --- Splash ---
+Splash:
+	WAIT_FRAMES 15
+	ld a, %00001000
+	ld [rBGP], a
+	WAIT_FRAMES 3
+	ld a, %00000100
+	ld [rBGP], a
+	WAIT_FRAMES 3
+	ld a, %00000000
+	ld [rBGP], a
+
+	WAIT_FRAMES 15
+
+	; Turn off LCD
+	xor a ; ld a, 0
+	ld [rLCDC], a
+
+	; Set OtakodeLogo TileSet
+	ld hl, _VRAM
+	ld de, OtakodeLogoTileSet
+	ld bc, OtakodeLogoTileSetEnd - OtakodeLogoTileSet
+	call Memcpy
+
+	; Set OtakodeLogo TileMap
+	ld hl, _SCRN0
+	ld de, OtakodeLogoTileMap
+	ld bc, 20 << 8 | 18 ; same as both `ld b, 20` and `ld c, 18`
+	call TileMapCopy
+
+	ld a, %01000000
+	ld [rBGP], a
+
+	; Turn on LCD
+	ld a, LCDCF_ON | LCDCF_WIN9800 | LCDCF_WINOFF | LCDCF_BG8000 | LCDCF_BG9800 | LCDCF_OBJ8 | LCDCF_OBJOFF | LCDCF_BGON
+	ld [rLCDC], a
+
+	WAIT_FRAMES 3
+	ld a, %10010000
+	ld [rBGP], a
+	WAIT_FRAMES 3
+	ld a, %11100100
+	ld [rBGP], a
+
+	WAIT_FRAMES 120
+
+	ld a, %10010000
+	ld [rBGP], a
+	WAIT_FRAMES 3
+	ld a, %01000000
+	ld [rBGP], a
+	WAIT_FRAMES 3
+	ld a, %00000000
+	ld [rBGP], a
+
+	WAIT_FRAMES 15
+
+	ret
+	; --- End Splash ---
+
+
 	; --- Init ---
 Init:
-	; Turn off LCD
-.waitVBlank
-	ld a, [rLY]
-	cp SCRN_Y ; are we past VBlank
-	jr c, .waitVBlank
+	WAIT_VBLANK
 
-	; set rLCDC to 0
+	; Turn off LCD
 	xor a ; ld a, 0
 	ld [rLCDC], a
 

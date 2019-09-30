@@ -17,8 +17,10 @@
     <None Include="Sources\tools.asm" />
     <None Include="Sources\variables.asm" />
     <None Include="TileMap\GameBoyTileMap.z80" />
+    <None Include="TileMap\OtakodeLogoTileMap.z80" />
     <None Include="TileSet\font.chr" />
     <None Include="TileSet\GameBoyTileSet.z80" />
+    <None Include="TileSet\OtakodeLogoTileSet.z80" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{60264ADC-B9A1-4DF0-B8EE-C7C1A3215259}</ProjectGuid>

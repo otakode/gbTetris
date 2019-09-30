@@ -50,5 +50,11 @@
     <None Include="Sources\macros.asm">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="TileSet\OtakodeLogoTileSet.z80">
+      <Filter>TileSets</Filter>
+    </None>
+    <None Include="TileMap\OtakodeLogoTileMap.z80">
+      <Filter>TileMap</Filter>
+    </None>
   </ItemGroup>
 </Project>

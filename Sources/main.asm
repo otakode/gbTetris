@@ -25,6 +25,8 @@ SECTION "Main", ROM0
 
 	; --- Start ---
 Start:
+	; Splash screen
+	call Splash
 	call Init
 	; continue to main
 	; --- End Start ---
