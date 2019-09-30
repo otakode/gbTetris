@@ -1,4 +1,4 @@
-; OTAKODELOGOTIMEMAP.INC
+; OTAKODELOGOTILEMAP.INC
 ;
 ; Map Include File.
 ;
@@ -20,4 +20,4 @@ OtakodeLogoTileMapBank   EQU 0
 
  GLOBAL OtakodeLogoTileMap
 
-; End of OTAKODELOGOTIMEMAP.INC
+; End of OTAKODELOGOTILEMAP.INC

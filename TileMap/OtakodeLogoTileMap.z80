@@ -1,4 +1,4 @@
-; OTAKODELOGOTIMEMAP.Z80
+; OTAKODELOGOTILEMAP.Z80
 ;
 ; Map Source File.
 ;
@@ -18,7 +18,7 @@ OtakodeLogoTileMapWidth  EQU 20
 OtakodeLogoTileMapHeight EQU 18
 OtakodeLogoTileMapBank   EQU 0
 
- SECTION "TileMap", HOME
+ SECTION "TileMap", ROM0
 
 OtakodeLogoTileMap::
 DB $01,$01,$01,$01,$0D,$0C,$05,$01,$0D,$0C
@@ -58,4 +58,4 @@ DB $01,$01,$01,$01,$01,$01,$01,$01,$01,$01
 DB $01,$01,$01,$01,$01,$01,$01,$02,$00,$00
 DB $00,$00,$03,$01,$01,$01,$01,$01,$01,$01
 
-; End of OTAKODELOGOTIMEMAP.Z80
+; End of OTAKODELOGOTILEMAP.Z80
