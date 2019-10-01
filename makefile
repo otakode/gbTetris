@@ -32,7 +32,7 @@ all : $(OBJ)
 
 # Clean target
 clean :
-#	$(RM) $(OBJ) $(TARGET)
+	$(RM) $(OBJ) $(TARGET)
 
 # Rebuild target
 rebuild : clean all
