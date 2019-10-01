@@ -83,14 +83,20 @@ Init:
 	call Memcpy
 
 	; Set GameBoy TileSet
-	ld hl, _VRAM
-	ld de, GameBoyTileSet
-	ld bc, GameBoyTileSetEnd - GameBoyTileSet
-	call Memcpy
+	;ld hl, _VRAM
+	;ld de, GameBoyTileSet
+	;ld bc, GameBoyTileSetEnd - GameBoyTileSet
+	;call Memcpy
 
 	; Set GameBoy TileMap
+	;ld hl, _SCRN0
+	;ld de, GameBoyTileMap
+	;ld bc, 20 << 8 | 18 ; same as both `ld b, 20` and `ld c, 18`
+	;call TileMapCopy
+
+	; Set Title TileMap
 	ld hl, _SCRN0
-	ld de, GameBoyTileMap
+	ld de, TitleTileMap
 	ld bc, 20 << 8 | 18 ; same as both `ld b, 20` and `ld c, 18`
 	call TileMapCopy
 
