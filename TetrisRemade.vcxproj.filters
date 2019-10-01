@@ -14,9 +14,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="TileSet\font.chr">
-      <Filter>TileSets</Filter>
-    </None>
     <None Include="Sources\data.asm">
       <Filter>Source Files</Filter>
     </None>
@@ -54,6 +51,12 @@
       <Filter>TileSets</Filter>
     </None>
     <None Include="TileMap\OtakodeLogoTileMap.z80">
+      <Filter>TileMap</Filter>
+    </None>
+    <None Include="TileSet\FontTileSet.z80">
+      <Filter>TileSets</Filter>
+    </None>
+    <None Include="TileMap\TitleTileMap.z80">
       <Filter>TileMap</Filter>
     </None>
   </ItemGroup>

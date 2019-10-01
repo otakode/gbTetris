@@ -18,7 +18,8 @@
     <None Include="Sources\variables.asm" />
     <None Include="TileMap\GameBoyTileMap.z80" />
     <None Include="TileMap\OtakodeLogoTileMap.z80" />
-    <None Include="TileSet\font.chr" />
+    <None Include="TileMap\TitleTileMap.z80" />
+    <None Include="TileSet\FontTileSet.z80" />
     <None Include="TileSet\GameBoyTileSet.z80" />
     <None Include="TileSet\OtakodeLogoTileSet.z80" />
   </ItemGroup>

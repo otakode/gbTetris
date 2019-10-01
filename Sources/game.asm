@@ -78,8 +78,8 @@ Init:
 
 	; Set Font TileSet
 	ld hl, _VRAM
-	ld de, FontTiles
-	ld bc, FontTilesEnd - FontTiles
+	ld de, FontTileSet
+	ld bc, FontTileSetEnd - FontTileSet
 	call Memcpy
 
 	; Set GameBoy TileSet
