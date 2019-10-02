@@ -4,7 +4,7 @@ SECTION "Interruption Handlers", ROM0
 	; --- ProcessVBlank ---
 ProcessVBlank:
 	push af
-	ld a, HIGH(wShadowOAM)
+	ld a, HIGH(wObjects)
 	call hOAMDMA
 	pop af
 	ret

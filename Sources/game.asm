@@ -71,10 +71,19 @@ Init:
 	xor a ; ld a, 0
 	ld [rLCDC], a
 
+	; Init input variable
+	ld [wInputState], a
+
 	; Init memory variables
 	ld [wTimerIECounter], a
 	ld [wTimeSec], a
 	ld [wTimeSec + 1], a
+
+	; Init game state
+	ld a, LOW(UpdateTitle)
+	ld [wUpdateLabel], a
+	ld a, HIGH(UpdateTitle)
+	ld [wUpdateLabel + 1], a
 
 	; Set Font TileSet
 	ld hl, _VRAM
@@ -82,25 +91,11 @@ Init:
 	ld bc, FontTileSetEnd - FontTileSet
 	call Memcpy
 
-	; Set GameBoy TileSet
-	;ld hl, _VRAM
-	;ld de, GameBoyTileSet
-	;ld bc, GameBoyTileSetEnd - GameBoyTileSet
-	;call Memcpy
-
-	; Set GameBoy TileMap
-	;ld hl, _SCRN0
-	;ld de, GameBoyTileMap
-	;ld bc, 20 << 8 | 18 ; same as both `ld b, 20` and `ld c, 18`
-	;call TileMapCopy
-
 	; Set Title TileMap
 	ld hl, _SCRN0
 	ld de, TitleTileMap
 	ld bc, 20 << 8 | 18 ; same as both `ld b, 20` and `ld c, 18`
 	call TileMapCopy
-
-	call InitGameBoyObjects
 
 	; Init display registers
 	ld a, %11100100 ; 11 10 01 00 simple dark to light color palette
@@ -116,6 +111,7 @@ Init:
 	; No sound
 	ld [rNR52], a
 
+	call InitObjects
 	call CopyDMARoutine
 	call ProcessVBlank ; first frame to init OAM
 
@@ -143,28 +139,25 @@ Init:
 	; --- End Init ---
 
 
-	; --- InitGameBoyObjects ---
-InitGameBoyObjects:
-	SET_SPRITE wDPadDown,     12*8, 6*8,  4, 0
-	SET_SPRITE wDPadUp,       10*8, 6*8,  1, 0
-	SET_SPRITE wDPadLeft,     11*8, 5*8,  2, 0
-	SET_SPRITE wDPadRight,    11*8, 7*8,  3, 0
-	SET_SPRITE wButtonStart,  15*8, 10*8, 7, 0
-	SET_SPRITE wButtonSelect, 15*8, 8*8,  7, 0
-	SET_SPRITE wButtonB,      12*8, 12*8, 6, 0
-	SET_SPRITE wButtonA,      11*8, 14*8, 6, 0
-	ld hl, wObjectsEnd
-	ld bc, wShadowOAMEnd - wObjectsEnd
+	; --- InitObjects ---
+InitObjects:
+	ld hl, wObjects
+	ld bc, wObjectsEnd - wObjects
 	call Memzero
 	ret
-	; --- End InitGameBoyObjects ---
+	; --- End InitObjects ---
 
 
 	; --- Game ---
 Game:
 	call CheckInput
-	call UpdateObjects
-	ret
+	ld a, [wUpdateLabel]
+	ld l, a
+	ld a, [wUpdateLabel + 1]
+	ld h, a
+	jp hl
+
+	ret ; will never be reached, but just in case
 	; --- End Game ---
 
 
@@ -193,25 +186,31 @@ ENDR
 	; --- End CheckInput ---
 
 
-	; --- UpdateObjects ---
-UPDATE_BUTTON: MACRO
-	ld a, [wInputState]
-	and \1
-	ld a, \4
-	jr z, .then\@
-	\3 a
-.then\@
-	ld [\2], a
-ENDM
-
-UpdateObjects:
-	UPDATE_BUTTON PADF_DOWN,   wDPadDown.y,     dec, (12*8+16)
-	UPDATE_BUTTON PADF_UP,     wDPadUp.y,       inc, (10*8+16)
-	UPDATE_BUTTON PADF_LEFT,   wDPadLeft.x,     inc, (5*8+8)
-	UPDATE_BUTTON PADF_RIGHT,  wDPadRight.x,    dec, (7*8+8)
-	UPDATE_BUTTON PADF_START,  wButtonStart.y,  inc, (15*8+16)
-	UPDATE_BUTTON PADF_SELECT, wButtonSelect.y, inc, (15*8+16)
-	UPDATE_BUTTON PADF_B,      wButtonB.y,      inc, (12*8+16)
-	UPDATE_BUTTON PADF_A,      wButtonA.y,      inc, (11*8+16)
+	; --- InitTitle ---
+InitTitle:
 	ret
-	; --- End UpdateObjects ---
+	; --- End UpdateTitle ---
+
+
+	; --- UpdateTitle ---
+UpdateTitle:
+	ret
+	; --- End UpdateTitle ---
+
+
+	; --- UpdateOptions ---
+UpdateOptions:
+	ret
+	; --- End UpdateOptions ---
+
+
+	; --- UpdateGame ---
+UpdateGame:
+	ret
+	; --- End UpdateGame ---
+
+
+	; --- UpdateScore ---
+UpdateScore:
+	ret
+	; --- End UpdateScore ---
