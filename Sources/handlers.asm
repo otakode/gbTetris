@@ -3,10 +3,6 @@ SECTION "Interruption Handlers", ROM0
 
 	; --- ProcessVBlank ---
 ProcessVBlank:
-	push af
-	ld a, HIGH(wObjects)
-	call hOAMDMA
-	pop af
 	ret
 	; --- End ProcessVBlank ---
 

@@ -58,9 +58,3 @@ wObject_39: SPRITE_OBJECT
 wObjectsEnd: ; --- End Sprite Objects ---
 
 wCursor EQUS "wObject_00"
-
-
-SECTION "OAM DMA", HRAM
-
-hOAMDMA::
-	ds DMARoutineEnd - DMARoutine ; Reserve space to copy the routine to

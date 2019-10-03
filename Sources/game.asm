@@ -79,23 +79,13 @@ Init:
 	ld [wTimeSec], a
 	ld [wTimeSec + 1], a
 
-	; Init game state
-	ld a, LOW(UpdateTitle)
-	ld [wUpdateLabel], a
-	ld a, HIGH(UpdateTitle)
-	ld [wUpdateLabel + 1], a
+	call InitObjects
 
 	; Set Font TileSet
 	ld hl, _VRAM
 	ld de, FontTileSet
 	ld bc, FontTileSetEnd - FontTileSet
 	call Memcpy
-
-	; Set Title TileMap
-	ld hl, _SCRN0
-	ld de, TitleTileMap
-	ld bc, 20 << 8 | 18 ; same as both `ld b, 20` and `ld c, 18`
-	call TileMapCopy
 
 	; Init display registers
 	ld a, %11100100 ; 11 10 01 00 simple dark to light color palette
@@ -111,9 +101,12 @@ Init:
 	; No sound
 	ld [rNR52], a
 
-	call InitObjects
+	; Init game state
+	call InitTitle
+
 	call CopyDMARoutine
-	call ProcessVBlank ; first frame to init OAM
+	ld a, HIGH(wObjects)
+	call hOAMDMA
 
 	; Turn screen on, display background
 	ld a, LCDCF_ON | LCDCF_WIN9800 | LCDCF_WINOFF | LCDCF_BG8000 | LCDCF_BG9800 | LCDCF_OBJ8 | LCDCF_OBJON | LCDCF_BGON
@@ -148,8 +141,8 @@ InitObjects:
 	; --- End InitObjects ---
 
 
-	; --- Game ---
-Game:
+	; --- Update ---
+Update:
 	call CheckInput
 	ld a, [wUpdateLabel]
 	ld l, a
@@ -158,7 +151,7 @@ Game:
 	jp hl
 
 	ret ; will never be reached, but just in case
-	; --- End Game ---
+	; --- End Update ---
 
 
 	; --- CheckInputs ---
@@ -188,14 +181,61 @@ ENDR
 
 	; --- InitTitle ---
 InitTitle:
+	LOAD_ADDRESS wUpdateLabel, UpdateTitle
+
+	; Set Title TileMap
+	ld hl, _SCRN0
+	ld de, TitleTileMap
+	ld bc, 20 << 8 | 18 ; same as both `ld b, 20` and `ld c, 18`
+	call TileMapCopy
+
+	; SET_SPRITE doesn't work with EQUS variable names
+	SET_SPRITE wObject_00, Y_POS 10, X_POS 6, $7F, $00
+
 	ret
 	; --- End UpdateTitle ---
 
 
 	; --- UpdateTitle ---
 UpdateTitle:
+	ld a, [wObject_00.y]
+	sub Y_POS 10
+	jr z, .start
+.options
+	TEST_INPUT PADF_A, .notOptions
+	; launch Options
+	ret
+.notOptions
+	TEST_INPUT PADF_UP, .afterUp
+	ld a, Y_POS 10
+	ld [wObject_00.y], a
+.afterUp
+	ret
+.start
+	TEST_INPUT PADF_A, .notStart
+	; launch Start
+	ret
+.notStart
+	TEST_INPUT PADF_DOWN, .afterDown
+	ld a, Y_POS 12
+	ld [wObject_00.y], a
+.afterDown
 	ret
 	; --- End UpdateTitle ---
+
+
+	; --- InitOptions ---
+InitOptions:
+	LOAD_ADDRESS wUpdateLabel, UpdateOptions
+
+	; Set Options TileMap
+	ld hl, _SCRN0
+	ld de, OptionsTileMap
+	ld bc, 20 << 8 | 18 ; same as both `ld b, 20` and `ld c, 18`
+	call TileMapCopy
+
+	ret
+	; --- End InitOptions
 
 
 	; --- UpdateOptions ---
@@ -204,10 +244,24 @@ UpdateOptions:
 	; --- End UpdateOptions ---
 
 
+	; --- InitGame ---
+InitGame:
+	LOAD_ADDRESS wUpdateLabel, UpdateGame
+	ret
+	; --- End InitGame ---
+
+
 	; --- UpdateGame ---
 UpdateGame:
 	ret
 	; --- End UpdateGame ---
+
+
+	; --- InitScore ---
+InitScore:
+	LOAD_ADDRESS wUpdateLabel, UpdateScore
+	ret
+	; --- End InitScore ---
 
 
 	; --- UpdateScore ---

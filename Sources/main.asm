@@ -1,8 +1,15 @@
 INCLUDE "hardware.inc"
 INCLUDE "macros.asm"
 
+INCLUDE "tools.asm"
+INCLUDE "data.asm"
+INCLUDE "variables.asm"
+
 ;INCLUDE "rst.asm"
 INCLUDE "interrupts.asm"
+INCLUDE "handlers.asm"
+
+INCLUDE "game.asm"
 
 
 SECTION "HEADER", ROM0[$100]
@@ -34,26 +41,14 @@ Start:
 
 	; --- Main ---
 Main:
-	; Game processing
-	call Game
+	; Update processing
+	call Update
 .waitVBlank
 	; Halt until next interrupt
 	Halt
-	nop ; required after a halt
 
 	ld a, [rIF]
 	cp IEF_VBLANK
 	jr z, .waitVBlank
 	jr Main
 	; --- End Main ---
-
-
-INCLUDE "handlers.asm"
-
-INCLUDE "game.asm"
-
-INCLUDE "tools.asm"
-
-INCLUDE "variables.asm"
-
-INCLUDE "data.asm"
