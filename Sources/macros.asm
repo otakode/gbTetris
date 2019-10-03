@@ -4,6 +4,13 @@ Y_POS EQUS "16 + 8 *"
 X_POS EQUS "8 + 8 *"
 
 
+TOGGLE_LCD: MACRO
+	ld a, [rLCDC]
+	xor LCDCF_ON
+	ld [rLCDC], a
+ENDM
+
+
 WAIT_VBLANK: MACRO
 .waitVBlank\@
 	ld a, [rLY]

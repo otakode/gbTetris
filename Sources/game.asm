@@ -101,6 +101,7 @@ Init:
 	; No sound
 	ld [rNR52], a
 
+	TOGGLE_LCD
 	; Init game state
 	call InitTitle
 
@@ -181,6 +182,9 @@ ENDR
 
 	; --- InitTitle ---
 InitTitle:
+	WAIT_VBLANK
+	TOGGLE_LCD
+
 	LOAD_ADDRESS wUpdateLabel, UpdateTitle
 
 	; Set Title TileMap
@@ -189,9 +193,9 @@ InitTitle:
 	ld bc, 20 << 8 | 18 ; same as both `ld b, 20` and `ld c, 18`
 	call TileMapCopy
 
-	; SET_SPRITE doesn't work with EQUS variable names
 	SET_SPRITE wObject_00, Y_POS 10, X_POS 6, $7F, $00
 
+	TOGGLE_LCD
 	ret
 	; --- End UpdateTitle ---
 
@@ -203,7 +207,7 @@ UpdateTitle:
 	jr z, .start
 .options
 	TEST_INPUT PADF_A, .notOptions
-	; launch Options
+	call InitOptions
 	ret
 .notOptions
 	TEST_INPUT PADF_UP, .afterUp
@@ -226,6 +230,9 @@ UpdateTitle:
 
 	; --- InitOptions ---
 InitOptions:
+	WAIT_VBLANK
+	TOGGLE_LCD
+
 	LOAD_ADDRESS wUpdateLabel, UpdateOptions
 
 	; Set Options TileMap
@@ -234,12 +241,60 @@ InitOptions:
 	ld bc, 20 << 8 | 18 ; same as both `ld b, 20` and `ld c, 18`
 	call TileMapCopy
 
+	SET_SPRITE wObject_00, Y_POS 14, X_POS 7, $7F, $00
+
+	TOGGLE_LCD
 	ret
 	; --- End InitOptions
 
 
 	; --- UpdateOptions ---
 UpdateOptions:
+	ld a, [wObject_00.y]
+	sub Y_POS 6
+	jr z, music
+	sub Y_POS 11 - 6
+	jr z, sfx
+
+back:
+	TEST_INPUT PADF_A, .notBack
+	call InitTitle
+	ret
+.notBack
+	TEST_INPUT PADF_UP, .afterUp
+	ld a, Y_POS 11
+	ld [wObject_00.y], a
+	ld a, X_POS 2
+	ld [wObject_00.x], a
+.afterUp
+	ret
+
+sfx:
+	TEST_INPUT PADF_A, .notSfx
+	; sfx adjustment
+	ret
+.notSfx
+	TEST_INPUT PADF_DOWN, .afterDown
+	ld a, Y_POS 14
+	ld [wObject_00.y], a
+	ld a, X_POS 7
+	ld [wObject_00.x], a
+.afterDown
+	TEST_INPUT PADF_UP, .afterUp
+	ld a, Y_POS 6
+	ld [wObject_00.y], a
+.afterUp
+	ret
+
+music:
+	TEST_INPUT PADF_A, .notMusic
+	; music adjustment
+	ret
+.notMusic
+	TEST_INPUT PADF_DOWN, .afterDown
+	ld a, Y_POS 11
+	ld [wObject_00.y], a
+.afterDown
 	ret
 	; --- End UpdateOptions ---
 
