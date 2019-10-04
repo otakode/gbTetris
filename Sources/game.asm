@@ -159,6 +159,11 @@ Update:
 CheckInput:
 	ld hl, rP1
 
+	; Update wLastInputState
+	ld a, [wInputState]
+	ld [wLastInputState], a
+
+	; Update wInputState
 	ld [hl], ~P1F_4
 REPT 2
 	ld a, [hl]
@@ -175,6 +180,26 @@ ENDR
 	or b
 	cpl
 	ld [wInputState], a
+
+	; Press and Release
+	ld b, a
+	ld a, [wLastInputState]
+	xor b
+	ld c, a
+
+	; Update wInputPress
+	and b
+	ld [wInputPress], a
+
+	; Update wInputRelease
+	ld a, b
+	cpl
+	ld b, a
+	ld a, c
+	cpl
+	and b
+	cpl
+	ld [wInputRelease], a
 
 	ret
 	; --- End CheckInput ---
@@ -206,21 +231,21 @@ UpdateTitle:
 	sub Y_POS 10
 	jr z, .start
 .options
-	TEST_INPUT PADF_A, .notOptions
+	TEST_INPUT wInputPress, PADF_A, .notOptions
 	call InitOptions
 	ret
 .notOptions
-	TEST_INPUT PADF_UP, .afterUp
+	TEST_INPUT wInputPress, PADF_UP, .afterUp
 	ld a, Y_POS 10
 	ld [wObject_00.y], a
 .afterUp
 	ret
 .start
-	TEST_INPUT PADF_A, .notStart
+	TEST_INPUT wInputPress, PADF_A, .notStart
 	; launch Start
 	ret
 .notStart
-	TEST_INPUT PADF_DOWN, .afterDown
+	TEST_INPUT wInputPress, PADF_DOWN, .afterDown
 	ld a, Y_POS 12
 	ld [wObject_00.y], a
 .afterDown
@@ -251,50 +276,60 @@ InitOptions:
 	; --- UpdateOptions ---
 UpdateOptions:
 	ld a, [wObject_00.y]
-	sub Y_POS 6
-	jr z, music
-	sub Y_POS 11 - 6
-	jr z, sfx
+	cp Y_POS 11
+	jr z, .sfx
+	cp Y_POS 14
+	jr z, .back
 
-back:
-	TEST_INPUT PADF_A, .notBack
-	call InitTitle
+.music
+	TEST_INPUT wInputPress, PADF_A, .notMusic
+	; music adjustment
 	ret
-.notBack
-	TEST_INPUT PADF_UP, .afterUp
+.notMusic
+	TEST_INPUT wInputPress, PADF_DOWN, .afterMusicDown
+	jr .toSfx
+.afterMusicDown
+	ret
+.toMusic
+	ld a, Y_POS 6
+	ld [wObject_00.y], a
+	ld a, X_POS 2
+	ld [wObject_00.x], a
+	ret
+
+.sfx
+	TEST_INPUT wInputPress, PADF_A, .notSfx
+	; sfx adjustment
+	ret
+.notSfx
+	TEST_INPUT wInputPress, PADF_DOWN, .afterSfxDown
+	jr .toBack
+.afterSfxDown
+	TEST_INPUT wInputPress, PADF_UP, .afterSfxUp
+	jr .toMusic
+.afterSfxUp
+	ret
+.toSfx
 	ld a, Y_POS 11
 	ld [wObject_00.y], a
 	ld a, X_POS 2
 	ld [wObject_00.x], a
-.afterUp
 	ret
 
-sfx:
-	TEST_INPUT PADF_A, .notSfx
-	; sfx adjustment
+.back
+	TEST_INPUT wInputPress, PADF_A, .notBack
+	call InitTitle
 	ret
-.notSfx
-	TEST_INPUT PADF_DOWN, .afterDown
+.notBack
+	TEST_INPUT wInputPress, PADF_UP, .afterBackUp
+	jr .toSfx
+.afterBackUp
+	ret
+.toBack
 	ld a, Y_POS 14
 	ld [wObject_00.y], a
 	ld a, X_POS 7
 	ld [wObject_00.x], a
-.afterDown
-	TEST_INPUT PADF_UP, .afterUp
-	ld a, Y_POS 6
-	ld [wObject_00.y], a
-.afterUp
-	ret
-
-music:
-	TEST_INPUT PADF_A, .notMusic
-	; music adjustment
-	ret
-.notMusic
-	TEST_INPUT PADF_DOWN, .afterDown
-	ld a, Y_POS 11
-	ld [wObject_00.y], a
-.afterDown
 	ret
 	; --- End UpdateOptions ---
 

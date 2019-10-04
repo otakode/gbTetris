@@ -3,6 +3,9 @@ SECTION "Variables", WRAM0
 
 	; Inputs
 wInputState: db ; input bits set if a button is down
+wLastInputState: db ; inputState from the last frame
+wInputPress: db ; input bits set if pressed this frame
+wInputRelease: db ; input bits set if released this frame
 
 	; Time
 wTimerIECounter: db ; counter for Timer Interruptions

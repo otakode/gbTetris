@@ -69,9 +69,9 @@ SET_SPRITE: MACRO
 ENDM
 
 
-	; TEST_INPUT <InputFlag>, <InactiveLabel>
+	; TEST_INPUT <InputValue>, <InputFlag>, <InactiveLabel>
 TEST_INPUT: MACRO
-	ld a, [wInputState]
-	and \1
-	jr z, \2
+	ld a, [\1]
+	and \2
+	jr z, \3
 ENDM
