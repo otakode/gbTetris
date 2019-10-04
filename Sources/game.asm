@@ -194,11 +194,7 @@ ENDR
 	; Update wInputRelease
 	ld a, b
 	cpl
-	ld b, a
-	ld a, c
-	cpl
-	and b
-	cpl
+	and c
 	ld [wInputRelease], a
 
 	ret
