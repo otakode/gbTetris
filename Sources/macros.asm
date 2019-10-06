@@ -4,10 +4,16 @@ Y_POS EQUS "16 + 8 *"
 X_POS EQUS "8 + 8 *"
 
 
-TOGGLE_LCD: MACRO
-	ld a, [rLCDC]
-	xor LCDCF_ON
-	ld [rLCDC], a
+SET_FLAG: MACRO
+	ld a, \2
+	ld [\1], a
+ENDM
+
+
+TOGGLE_FLAG: MACRO
+	ld a, [\1]
+	xor \2
+	ld [\1], a
 ENDM
 
 
@@ -19,20 +25,20 @@ WAIT_VBLANK: MACRO
 ENDM
 
 
-WAIT_POST_VBLANK: MACRO
-.waitPostVBlank\@
-	ld a, [rLY]
-	cp SCRN_Y
-	jr nc, .waitPostVBlank\@
+HALT_VBLANK: MACRO
+.waitVBlank\@
+	Halt
+	ld a, [rIF]
+	cp IEF_VBLANK
+	jr z, .waitVBlank\@
 ENDM
 
 
-	; WAIT_FRAMES <NumberOfFrames>
-WAIT_FRAMES: MACRO
+	; HALT_FRAMES <NumberOfFrames>
+HALT_FRAMES: MACRO
 	ld b, \1
 .nextFrame\@
-	WAIT_POST_VBLANK
-	WAIT_VBLANK
+	HALT_VBLANK
 	dec b
 	jr nz, .nextFrame\@
 ENDM

@@ -18,7 +18,7 @@ ScoreTileMapWidth  EQU 20
 ScoreTileMapHeight EQU 18
 ScoreTileMapBank   EQU 0
 
- SECTION "TileMap", HOME
+ SECTION "TileMap", ROM0
 
 ScoreTileMap::
 DB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00

@@ -16,12 +16,12 @@
     <None Include="Sources\main.asm" />
     <None Include="Sources\tools.asm" />
     <None Include="Sources\variables.asm" />
-    <None Include="TileMap\GameBoyTileMap.z80" />
+    <None Include="TileMap\GameTileMap.z80" />
     <None Include="TileMap\OptionsTileMap.z80" />
     <None Include="TileMap\OtakodeLogoTileMap.z80" />
+    <None Include="TileMap\ScoreTileMap.z80" />
     <None Include="TileMap\TitleTileMap.z80" />
     <None Include="TileSet\FontTileSet.z80" />
-    <None Include="TileSet\GameBoyTileSet.z80" />
     <None Include="TileSet\OtakodeLogoTileSet.z80" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

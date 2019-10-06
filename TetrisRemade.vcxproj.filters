@@ -38,12 +38,6 @@
     <None Include="Sources\variables.asm">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="TileSet\GameBoyTileSet.z80">
-      <Filter>TileSets</Filter>
-    </None>
-    <None Include="TileMap\GameBoyTileMap.z80">
-      <Filter>TileMap</Filter>
-    </None>
     <None Include="Sources\macros.asm">
       <Filter>Source Files</Filter>
     </None>
@@ -60,6 +54,12 @@
       <Filter>TileMap</Filter>
     </None>
     <None Include="TileMap\OptionsTileMap.z80">
+      <Filter>TileMap</Filter>
+    </None>
+    <None Include="TileMap\GameTileMap.z80">
+      <Filter>TileMap</Filter>
+    </None>
+    <None Include="TileMap\ScoreTileMap.z80">
       <Filter>TileMap</Filter>
     </None>
   </ItemGroup>

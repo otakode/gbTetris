@@ -4,21 +4,27 @@ SECTION "Game", ROM0
 
 	; --- Splash ---
 Splash:
-	WAIT_FRAMES 15
-	ld a, %00001000
-	ld [rBGP], a
-	WAIT_FRAMES 3
-	ld a, %00000100
-	ld [rBGP], a
-	WAIT_FRAMES 3
-	ld a, %00000000
-	ld [rBGP], a
+	WAIT_VBLANK
 
-	WAIT_FRAMES 15
+	; Init OAM
+	call InitObjects
+	call CopyDMARoutine
+	ld a, HIGH(wObjects)
+	call hOAMDMA
 
-	; Turn off LCD
-	xor a ; ld a, 0
-	ld [rLCDC], a
+	SET_FLAG rIE, IEF_VBLANK
+	ei
+
+	HALT_FRAMES 15
+	SET_FLAG rBGP, %00001000
+	HALT_FRAMES 3
+	SET_FLAG rBGP, %00000100
+	HALT_FRAMES 3
+	SET_FLAG rBGP, %00000000
+
+	HALT_FRAMES 15
+
+	SET_FLAG rLCDC, LCDCF_OFF
 
 	; Set OtakodeLogo TileSet
 	ld hl, _VRAM
@@ -32,32 +38,24 @@ Splash:
 	ld bc, 20 << 8 | 18 ; same as both `ld b, 20` and `ld c, 18`
 	call TileMapCopy
 
-	ld a, %01000000
-	ld [rBGP], a
+	SET_FLAG rBGP, %01000000
 
-	; Turn on LCD
-	ld a, LCDCF_ON | LCDCF_WIN9800 | LCDCF_WINOFF | LCDCF_BG8000 | LCDCF_BG9800 | LCDCF_OBJ8 | LCDCF_OBJOFF | LCDCF_BGON
-	ld [rLCDC], a
+	SET_FLAG rLCDC, LCDCF_ON | LCDCF_BG8000 | LCDCF_BG9800 | LCDCF_BGON
 
-	WAIT_FRAMES 3
-	ld a, %10010000
-	ld [rBGP], a
-	WAIT_FRAMES 3
-	ld a, %11100100
-	ld [rBGP], a
+	HALT_FRAMES 3
+	SET_FLAG rBGP, %10010000
+	HALT_FRAMES 3
+	SET_FLAG rBGP, %11100100
 
-	WAIT_FRAMES 120
+	HALT_FRAMES 120
 
-	ld a, %10010000
-	ld [rBGP], a
-	WAIT_FRAMES 3
-	ld a, %01000000
-	ld [rBGP], a
-	WAIT_FRAMES 3
-	ld a, %00000000
-	ld [rBGP], a
+	SET_FLAG rBGP, %10010000
+	HALT_FRAMES 3
+	SET_FLAG rBGP, %01000000
+	HALT_FRAMES 3
+	SET_FLAG rBGP, %00000000
 
-	WAIT_FRAMES 15
+	HALT_FRAMES 15
 
 	ret
 	; --- End Splash ---
@@ -65,21 +63,26 @@ Splash:
 
 	; --- Init ---
 Init:
-	WAIT_VBLANK
+	HALT_VBLANK
+	di
 
-	; Turn off LCD
-	xor a ; ld a, 0
-	ld [rLCDC], a
+	SET_FLAG rLCDC, LCDCF_OFF
 
-	; Init input variable
-	ld [wInputState], a
-
-	; Init memory variables
+	; Init timer variables
 	ld [wTimerIECounter], a
 	ld [wTimeSec], a
 	ld [wTimeSec + 1], a
 
-	call InitObjects
+	; set Timer to 16Hz interruptions (lowest possible)
+	SET_FLAG rTMA, $00 ; overflow at 256th timer frequency
+	SET_FLAG rTAC, TACF_4KHZ
+	SET_FLAG rTAC, TACF_START
+
+	; set Interrupts
+	SET_FLAG rIE, IEF_TIMER | IEF_VBLANK
+
+	; Turn off Sound
+	ld [rNR52], a
 
 	; Set Font TileSet
 	ld hl, _VRAM
@@ -87,48 +90,20 @@ Init:
 	ld bc, FontTileSetEnd - FontTileSet
 	call Memcpy
 
-	; Init display registers
-	ld a, %11100100 ; 11 10 01 00 simple dark to light color palette
-	ld [rBGP], a
-	ld [rOBP0], a
-	ld [rOBP1], a
+	SET_FLAG rBGP,  %11100100
+	SET_FLAG rOBP0, %11100100
+	SET_FLAG rOBP1, %11100100
 
-	; Set Screen position to 0,0
-	xor a ; ld a, 0
-	ld [rSCY], a
-	ld [rSCX], a
+	; Turn screen on, display background
+	SET_FLAG rLCDC, LCDCF_ON | LCDCF_BG8000 | LCDCF_BG9800 | LCDCF_OBJ8 | LCDCF_OBJON | LCDCF_BGON
 
-	; No sound
-	ld [rNR52], a
-
-	TOGGLE_LCD
 	; Init game state
 	call InitTitle
 
-	call CopyDMARoutine
-	ld a, HIGH(wObjects)
-	call hOAMDMA
-
-	; Turn screen on, display background
-	ld a, LCDCF_ON | LCDCF_WIN9800 | LCDCF_WINOFF | LCDCF_BG8000 | LCDCF_BG9800 | LCDCF_OBJ8 | LCDCF_OBJON | LCDCF_BGON
-	ld [rLCDC], a
-
-	; set Interrupts
-	ld a, IEF_TIMER | IEF_VBLANK
-	ld [rIE], a
-
-	; set Timer to 16Hz interruptions (lowest possible)
-	; set TMA
-	xor a ; ld a, $00 ; overflow at 256th timer frequency
-	ld [rTMA], a
-	; set TAC
-	ld a, TACF_4KHZ
-	ld [rTAC], a
-	ld a, TACF_START
-	ld [rTAC], a
+	; Init input variable
+	ld [wInputState], a
 
 	ei
-
 	ret
 	; --- End Init ---
 
@@ -204,7 +179,7 @@ ENDR
 	; --- InitTitle ---
 InitTitle:
 	WAIT_VBLANK
-	TOGGLE_LCD
+	TOGGLE_FLAG rLCDC, LCDCF_ON
 
 	LOAD_ADDRESS wUpdateLabel, UpdateTitle
 
@@ -216,7 +191,7 @@ InitTitle:
 
 	SET_SPRITE wObject_00, Y_POS 10, X_POS 6, $7F, $00
 
-	TOGGLE_LCD
+	TOGGLE_FLAG rLCDC, LCDCF_ON
 	ret
 	; --- End UpdateTitle ---
 
@@ -252,7 +227,7 @@ UpdateTitle:
 	; --- InitOptions ---
 InitOptions:
 	WAIT_VBLANK
-	TOGGLE_LCD
+	TOGGLE_FLAG rLCDC, LCDCF_ON
 
 	LOAD_ADDRESS wUpdateLabel, UpdateOptions
 
@@ -264,7 +239,7 @@ InitOptions:
 
 	SET_SPRITE wObject_00, Y_POS 14, X_POS 7, $7F, $00
 
-	TOGGLE_LCD
+	TOGGLE_FLAG rLCDC, LCDCF_ON
 	ret
 	; --- End InitOptions
 
@@ -332,7 +307,20 @@ UpdateOptions:
 
 	; --- InitGame ---
 InitGame:
+	WAIT_VBLANK
+	TOGGLE_FLAG rLCDC, LCDCF_ON
+
 	LOAD_ADDRESS wUpdateLabel, UpdateGame
+
+	; Set Game TileMap
+	ld hl, _SCRN0
+	ld de, GameTileMap
+	ld bc, 20 << 8 | 18 ; same as both `ld b, 20` and `ld c, 18`
+	call TileMapCopy
+
+	SET_SPRITE wObject_00, 0, 0, $00, $00
+
+	TOGGLE_FLAG rLCDC, LCDCF_ON
 	ret
 	; --- End InitGame ---
 
@@ -345,7 +333,20 @@ UpdateGame:
 
 	; --- InitScore ---
 InitScore:
+	WAIT_VBLANK
+	TOGGLE_FLAG rLCDC, LCDCF_ON
+
 	LOAD_ADDRESS wUpdateLabel, UpdateScore
+
+	; Set Game TileMap
+	ld hl, _SCRN0
+	ld de, GameTileMap
+	ld bc, 20 << 8 | 18 ; same as both `ld b, 20` and `ld c, 18`
+	call TileMapCopy
+
+	SET_SPRITE wObject_00, 0, 0, $00, $00
+
+	TOGGLE_FLAG rLCDC, LCDCF_ON
 	ret
 	; --- End InitScore ---
 

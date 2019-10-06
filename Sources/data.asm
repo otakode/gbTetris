@@ -21,4 +21,10 @@ TitleTileMapEnd:
 INCLUDE "../TileMap/OptionsTileMap.z80"
 OptionsTileMapEnd:
 
+INCLUDE "../TileMap/GameTileMap.z80"
+GameTileMapEnd:
+
+INCLUDE "../TileMap/ScoreTileMap.z80"
+ScoreTileMapEnd:
+
 ; --- End TileMaps ---

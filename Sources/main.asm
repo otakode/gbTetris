@@ -43,12 +43,6 @@ Start:
 Main:
 	; Update processing
 	call Update
-.waitVBlank
-	; Halt until next interrupt
-	Halt
-
-	ld a, [rIF]
-	cp IEF_VBLANK
-	jr z, .waitVBlank
+	HALT_VBLANK
 	jr Main
 	; --- End Main ---
