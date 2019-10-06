@@ -199,8 +199,20 @@ InitTitle:
 	; --- UpdateTitle ---
 UpdateTitle:
 	ld a, [wObject_00.y]
-	sub Y_POS 10
-	jr z, .start
+	sub Y_POS 12
+	jr z, .options
+
+.start
+	TEST_INPUT wInputPress, PADF_A, .notStart
+	call InitGame
+	ret
+.notStart
+	TEST_INPUT wInputPress, PADF_DOWN, .afterDown
+	ld a, Y_POS 12
+	ld [wObject_00.y], a
+.afterDown
+	ret
+
 .options
 	TEST_INPUT wInputPress, PADF_A, .notOptions
 	call InitOptions
@@ -210,16 +222,6 @@ UpdateTitle:
 	ld a, Y_POS 10
 	ld [wObject_00.y], a
 .afterUp
-	ret
-.start
-	TEST_INPUT wInputPress, PADF_A, .notStart
-	; launch Start
-	ret
-.notStart
-	TEST_INPUT wInputPress, PADF_DOWN, .afterDown
-	ld a, Y_POS 12
-	ld [wObject_00.y], a
-.afterDown
 	ret
 	; --- End UpdateTitle ---
 
@@ -327,6 +329,8 @@ InitGame:
 
 	; --- UpdateGame ---
 UpdateGame:
+	HALT_FRAMES 120
+	call InitScore
 	ret
 	; --- End UpdateGame ---
 
@@ -338,9 +342,9 @@ InitScore:
 
 	LOAD_ADDRESS wUpdateLabel, UpdateScore
 
-	; Set Game TileMap
+	; Set Score TileMap
 	ld hl, _SCRN0
-	ld de, GameTileMap
+	ld de, ScoreTileMap
 	ld bc, 20 << 8 | 18 ; same as both `ld b, 20` and `ld c, 18`
 	call TileMapCopy
 
@@ -353,5 +357,7 @@ InitScore:
 
 	; --- UpdateScore ---
 UpdateScore:
+	HALT_FRAMES 120
+	call InitTitle
 	ret
 	; --- End UpdateScore ---
