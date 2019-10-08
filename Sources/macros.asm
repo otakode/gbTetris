@@ -1,6 +1,6 @@
 
-Y_POS EQUS "16 + 8 *"
 
+Y_POS EQUS "16 + 8 *"
 X_POS EQUS "8 + 8 *"
 
 
@@ -53,6 +53,14 @@ LOAD_ADDRESS: MACRO
 ENDM
 
 
+	; TEST_INPUT <InputValue>, <InputFlag>, <InactiveLabel>
+TEST_INPUT: MACRO
+	ld a, [\1]
+	and \2
+	jr z, \3
+ENDM
+
+
 	; Structure
 SPRITE_OBJECT: MACRO
 .y db
@@ -75,9 +83,8 @@ SET_SPRITE: MACRO
 ENDM
 
 
-	; TEST_INPUT <InputValue>, <InputFlag>, <InactiveLabel>
-TEST_INPUT: MACRO
-	ld a, [\1]
-	and \2
-	jr z, \3
+	; Structure
+HIGHSCORE_OBJECT: MACRO
+.name  ds 10
+.score dl
 ENDM

@@ -176,9 +176,9 @@ ENDR
 	; --- End CheckInput ---
 
 
-START_Y_POS  EQUS "Y_POS 13"
-OPTION_Y_POS EQUS "Y_POS 15"
-CURSOR_X_POS EQUS "X_POS 5"
+START_Y_POS  SET Y_POS 13
+OPTION_Y_POS SET Y_POS 15
+CURSOR_X_POS SET X_POS 5
 	; --- InitTitle ---
 InitTitle:
 	WAIT_VBLANK
@@ -229,12 +229,12 @@ UpdateTitle:
 	; --- End UpdateTitle ---
 
 
-MUSIC_Y_POS EQUS "Y_POS 6"
-SOUND_Y_POS EQUS "Y_POS 11"
-BACK_Y_POS  EQUS "Y_POS 15"
-BACK_X_POS  EQUS "X_POS 6"
-LEFT_X_POS  EQUS "X_POS 3"
-RIGHT_X_POS EQUS "X_POS 16"
+MUSIC_Y_POS SET Y_POS 6
+SOUND_Y_POS SET Y_POS 11
+BACK_Y_POS  SET Y_POS 15
+BACK_X_POS  SET X_POS 6
+LEFT_X_POS  SET X_POS 3
+RIGHT_X_POS SET X_POS 16
 	; --- InitOptions ---
 InitOptions:
 	WAIT_VBLANK
@@ -338,7 +338,9 @@ InitGame:
 
 	SET_SPRITE wObject_00, 0, 0, $00, $00
 
-	
+	ld hl, wScore
+	ld bc, wBlockMapEnd - wScore
+	call Memzero
 
 	TOGGLE_FLAG rLCDC, LCDCF_ON
 	ret
@@ -353,6 +355,8 @@ UpdateGame:
 	; --- End UpdateGame ---
 
 
+BACK_Y_POS SET Y_POS 15
+BACK_X_POS SET X_POS 6
 	; --- InitScore ---
 InitScore:
 	WAIT_VBLANK
@@ -366,7 +370,24 @@ InitScore:
 	ld bc, 20 << 8 | 18 ; same as both `ld b, 20` and `ld c, 18`
 	call TileMapCopy
 
-	SET_SPRITE wObject_00, Y_POS 15, X_POS 6, $7F, OAMF_PAL1
+	SET_SPRITE wObject_00, BACK_Y_POS, BACK_X_POS, $7F, OAMF_PAL1
+
+	ld hl, wHighScore
+	ld bc, wHighScoreEnd - wHighScore
+	call Memzero
+
+COUNT SET 0
+REPT 10
+	ld hl, _SCRN0 + (3 + COUNT) * SCRN_VX_B + 1
+	ld de, wHighScore + COUNT * (wHighScore_1 - wHighScore_0)
+	ld bc, 10
+	call Memcpy
+	call BCDToStr
+	call BCDToStr
+	call BCDToStr
+	call BCDToStr
+COUNT SET COUNT + 1
+ENDR
 
 	TOGGLE_FLAG rLCDC, LCDCF_ON
 	ret

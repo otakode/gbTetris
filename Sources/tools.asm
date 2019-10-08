@@ -122,6 +122,26 @@ TileMapCopy:
 	; --- End TileMapCopy ---
 
 
+	; --- BCDToStr ---
+	; @param hl ; address to write string to (2 chars) ; return address after the last character written
+	; @param de ; address of the registry in BCD ; return unchanged
+	; @flags ; a = unit character value ; C = false ; H = true ; N = false ; Z = false
+BCDToStr:
+	ld a, [de]
+	swap a
+	and a, $0F
+	add "0"
+	ldi [hl], a
+
+	ld a, [de]
+	swap a
+	and a, $0F
+	add "0"
+	ldi [hl], a
+	ret
+	; --- End BCDToStr ---
+
+
 	; --- R8ToHexStr ---
 	; @param hl ; address to write string to (2 chars) ; return address to the character at the start of the string
 	; @param e ; value of the number ; return unchanged

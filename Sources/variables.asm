@@ -14,25 +14,28 @@ wTimeSec: dw ; time in seconds (BCD)
 	; Game Logic
 wUpdateLabel: dw ; current update function
 
+	; Game Screen memory
 wScore: dl ; current Score value (BCD)
-wLevel: dw ; current Level value (BCD)
+wLevel: db ; current Level value (BCD)
 wLines: dw ; current Lines value (BCD)
 wPiece: db ; current Piece
 wNextPiece: db ; next Piece
 wBlockMap: ds 2 * 20 ; block map is 10 wide (2 bytes per line) and 20 tall (with 2 hidden lines above the screen)
                      ; stored in reverse order (last line first)
+wBlockMapEnd:
 
+	; Score Screen memory
 wHighScore:
-wHighScore_0: dl
-wHighScore_1: dl
-wHighScore_2: dl
-wHighScore_3: dl
-wHighScore_4: dl
-wHighScore_5: dl
-wHighScore_6: dl
-wHighScore_7: dl
-wHighScore_8: dl
-wHighScore_9: dl
+wHighScore_0: HIGHSCORE_OBJECT
+wHighScore_1: HIGHSCORE_OBJECT
+wHighScore_2: HIGHSCORE_OBJECT
+wHighScore_3: HIGHSCORE_OBJECT
+wHighScore_4: HIGHSCORE_OBJECT
+wHighScore_5: HIGHSCORE_OBJECT
+wHighScore_6: HIGHSCORE_OBJECT
+wHighScore_7: HIGHSCORE_OBJECT
+wHighScore_8: HIGHSCORE_OBJECT
+wHighScore_9: HIGHSCORE_OBJECT
 wHighScoreEnd:
 
 
