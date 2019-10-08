@@ -84,15 +84,15 @@ Init:
 	; Turn off Sound
 	ld [rNR52], a
 
-	; Set Font TileSet
+	; Set Tetris TileSet
 	ld hl, _VRAM
-	ld de, FontTileSet
-	ld bc, FontTileSetEnd - FontTileSet
+	ld de, TetrisTileSet
+	ld bc, TetrisTileSetEnd - TetrisTileSet
 	call Memcpy
 
 	SET_FLAG rBGP,  %11100100
 	SET_FLAG rOBP0, %11100100
-	SET_FLAG rOBP1, %11100100
+	SET_FLAG rOBP1, %00011011
 
 	; Turn screen on, display background
 	SET_FLAG rLCDC, LCDCF_ON | LCDCF_BG8000 | LCDCF_BG9800 | LCDCF_OBJ8 | LCDCF_OBJON | LCDCF_BGON
@@ -189,7 +189,7 @@ InitTitle:
 	ld bc, 20 << 8 | 18 ; same as both `ld b, 20` and `ld c, 18`
 	call TileMapCopy
 
-	SET_SPRITE wObject_00, Y_POS 10, X_POS 6, $7F, $00
+	SET_SPRITE wObject_00, Y_POS 10, X_POS 5, $7F, OAMF_PAL1
 
 	TOGGLE_FLAG rLCDC, LCDCF_ON
 	ret
@@ -239,7 +239,8 @@ InitOptions:
 	ld bc, 20 << 8 | 18 ; same as both `ld b, 20` and `ld c, 18`
 	call TileMapCopy
 
-	SET_SPRITE wObject_00, Y_POS 14, X_POS 7, $7F, $00
+	SET_SPRITE wObject_00, Y_POS 14, X_POS 6, $7F, OAMF_PAL1
+	SET_SPRITE wObject_01, 0, X_POS 16, $7F, OAMF_PAL0
 
 	TOGGLE_FLAG rLCDC, LCDCF_ON
 	ret
@@ -266,8 +267,8 @@ UpdateOptions:
 .toMusic
 	ld a, Y_POS 6
 	ld [wObject_00.y], a
-	ld a, X_POS 2
-	ld [wObject_00.x], a
+	ld a, Y_POS 6
+	ld [wObject_01.y], a
 	ret
 
 .sfx
@@ -285,8 +286,12 @@ UpdateOptions:
 .toSfx
 	ld a, Y_POS 11
 	ld [wObject_00.y], a
-	ld a, X_POS 2
+	ld a, X_POS 3
 	ld [wObject_00.x], a
+	ld a, OAMF_XFLIP
+	ld [wObject_00.flags], a
+	ld a, Y_POS 11
+	ld [wObject_01.y], a
 	ret
 
 .back
@@ -301,8 +306,12 @@ UpdateOptions:
 .toBack
 	ld a, Y_POS 14
 	ld [wObject_00.y], a
-	ld a, X_POS 7
+	ld a, X_POS 6
 	ld [wObject_00.x], a
+	ld a, OAMF_PAL1
+	ld [wObject_00.flags], a
+	ld a, 0
+	ld [wObject_01.y], a
 	ret
 	; --- End UpdateOptions ---
 

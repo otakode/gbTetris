@@ -7,6 +7,9 @@ OtakodeLogoTileSetEnd:
 INCLUDE "../TileSet/FontTileSet.z80"
 FontTileSetEnd:
 
+INCLUDE "../TileSet/TetrisTileSet.z80"
+TetrisTileSetEnd:
+
 ; --- End TileSets ---
 
 

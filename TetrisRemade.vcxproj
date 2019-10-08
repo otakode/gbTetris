@@ -23,6 +23,7 @@
     <None Include="TileMap\TitleTileMap.z80" />
     <None Include="TileSet\FontTileSet.z80" />
     <None Include="TileSet\OtakodeLogoTileSet.z80" />
+    <None Include="TileSet\TetrisTileSet.z80" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{60264ADC-B9A1-4DF0-B8EE-C7C1A3215259}</ProjectGuid>

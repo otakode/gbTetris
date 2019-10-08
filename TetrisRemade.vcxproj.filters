@@ -62,5 +62,8 @@
     <None Include="TileMap\ScoreTileMap.z80">
       <Filter>TileMap</Filter>
     </None>
+    <None Include="TileSet\TetrisTileSet.z80">
+      <Filter>TileSets</Filter>
+    </None>
   </ItemGroup>
 </Project>
