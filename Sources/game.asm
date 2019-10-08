@@ -176,6 +176,9 @@ ENDR
 	; --- End CheckInput ---
 
 
+START_Y_POS  EQUS "Y_POS 13"
+OPTION_Y_POS EQUS "Y_POS 15"
+CURSOR_X_POS EQUS "X_POS 5"
 	; --- InitTitle ---
 InitTitle:
 	WAIT_VBLANK
@@ -189,7 +192,7 @@ InitTitle:
 	ld bc, 20 << 8 | 18 ; same as both `ld b, 20` and `ld c, 18`
 	call TileMapCopy
 
-	SET_SPRITE wObject_00, Y_POS 10, X_POS 5, $7F, OAMF_PAL1
+	SET_SPRITE wObject_00, START_Y_POS, CURSOR_X_POS, $7F, OAMF_PAL1
 
 	TOGGLE_FLAG rLCDC, LCDCF_ON
 	ret
@@ -199,7 +202,7 @@ InitTitle:
 	; --- UpdateTitle ---
 UpdateTitle:
 	ld a, [wObject_00.y]
-	sub Y_POS 12
+	sub OPTION_Y_POS
 	jr z, .options
 
 .start
@@ -208,7 +211,7 @@ UpdateTitle:
 	ret
 .notStart
 	TEST_INPUT wInputPress, PADF_DOWN, .afterDown
-	ld a, Y_POS 12
+	ld a, OPTION_Y_POS
 	ld [wObject_00.y], a
 .afterDown
 	ret
@@ -219,13 +222,19 @@ UpdateTitle:
 	ret
 .notOptions
 	TEST_INPUT wInputPress, PADF_UP, .afterUp
-	ld a, Y_POS 10
+	ld a, START_Y_POS
 	ld [wObject_00.y], a
 .afterUp
 	ret
 	; --- End UpdateTitle ---
 
 
+MUSIC_Y_POS EQUS "Y_POS 6"
+SOUND_Y_POS EQUS "Y_POS 11"
+BACK_Y_POS  EQUS "Y_POS 15"
+BACK_X_POS  EQUS "X_POS 6"
+LEFT_X_POS  EQUS "X_POS 3"
+RIGHT_X_POS EQUS "X_POS 16"
 	; --- InitOptions ---
 InitOptions:
 	WAIT_VBLANK
@@ -239,8 +248,8 @@ InitOptions:
 	ld bc, 20 << 8 | 18 ; same as both `ld b, 20` and `ld c, 18`
 	call TileMapCopy
 
-	SET_SPRITE wObject_00, Y_POS 14, X_POS 6, $7F, OAMF_PAL1
-	SET_SPRITE wObject_01, 0, X_POS 16, $7F, OAMF_PAL0
+	SET_SPRITE wObject_00, BACK_Y_POS, BACK_X_POS, $7F, OAMF_PAL1
+	SET_SPRITE wObject_01, 0, RIGHT_X_POS, $7F, OAMF_PAL0
 
 	TOGGLE_FLAG rLCDC, LCDCF_ON
 	ret
@@ -250,9 +259,9 @@ InitOptions:
 	; --- UpdateOptions ---
 UpdateOptions:
 	ld a, [wObject_00.y]
-	cp Y_POS 11
+	cp SOUND_Y_POS
 	jr z, .sfx
-	cp Y_POS 14
+	cp BACK_Y_POS
 	jr z, .back
 
 .music
@@ -265,9 +274,8 @@ UpdateOptions:
 .afterMusicDown
 	ret
 .toMusic
-	ld a, Y_POS 6
+	ld a, MUSIC_Y_POS
 	ld [wObject_00.y], a
-	ld a, Y_POS 6
 	ld [wObject_01.y], a
 	ret
 
@@ -284,14 +292,13 @@ UpdateOptions:
 .afterSfxUp
 	ret
 .toSfx
-	ld a, Y_POS 11
+	ld a, SOUND_Y_POS
 	ld [wObject_00.y], a
-	ld a, X_POS 3
+	ld [wObject_01.y], a
+	ld a, LEFT_X_POS
 	ld [wObject_00.x], a
 	ld a, OAMF_XFLIP
 	ld [wObject_00.flags], a
-	ld a, Y_POS 11
-	ld [wObject_01.y], a
 	ret
 
 .back
@@ -304,13 +311,13 @@ UpdateOptions:
 .afterBackUp
 	ret
 .toBack
-	ld a, Y_POS 14
+	ld a, BACK_Y_POS
 	ld [wObject_00.y], a
-	ld a, X_POS 6
+	ld a, BACK_X_POS
 	ld [wObject_00.x], a
 	ld a, OAMF_PAL1
 	ld [wObject_00.flags], a
-	ld a, 0
+	ld a, 0 ; move right arrow off screen
 	ld [wObject_01.y], a
 	ret
 	; --- End UpdateOptions ---
@@ -330,6 +337,8 @@ InitGame:
 	call TileMapCopy
 
 	SET_SPRITE wObject_00, 0, 0, $00, $00
+
+	
 
 	TOGGLE_FLAG rLCDC, LCDCF_ON
 	ret
@@ -357,7 +366,7 @@ InitScore:
 	ld bc, 20 << 8 | 18 ; same as both `ld b, 20` and `ld c, 18`
 	call TileMapCopy
 
-	SET_SPRITE wObject_00, 0, 0, $00, $00
+	SET_SPRITE wObject_00, Y_POS 15, X_POS 6, $7F, OAMF_PAL1
 
 	TOGGLE_FLAG rLCDC, LCDCF_ON
 	ret
@@ -366,7 +375,9 @@ InitScore:
 
 	; --- UpdateScore ---
 UpdateScore:
-	HALT_FRAMES 120
+	TEST_INPUT wInputPress, PADF_A, .notBack
 	call InitTitle
+	ret
+.notBack
 	ret
 	; --- End UpdateScore ---

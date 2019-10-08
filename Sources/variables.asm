@@ -11,7 +11,29 @@ wInputRelease: db ; input bits set if released this frame
 wTimerIECounter: db ; counter for Timer Interruptions
 wTimeSec: dw ; time in seconds (BCD)
 
+	; Game Logic
 wUpdateLabel: dw ; current update function
+
+wScore: dl ; current Score value (BCD)
+wLevel: dw ; current Level value (BCD)
+wLines: dw ; current Lines value (BCD)
+wPiece: db ; current Piece
+wNextPiece: db ; next Piece
+wBlockMap: ds 2 * 20 ; block map is 10 wide (2 bytes per line) and 20 tall (with 2 hidden lines above the screen)
+                     ; stored in reverse order (last line first)
+
+wHighScore:
+wHighScore_0: dl
+wHighScore_1: dl
+wHighScore_2: dl
+wHighScore_3: dl
+wHighScore_4: dl
+wHighScore_5: dl
+wHighScore_6: dl
+wHighScore_7: dl
+wHighScore_8: dl
+wHighScore_9: dl
+wHighScoreEnd:
 
 
 SECTION "OAM Sprites", WRAM0 [$C100]
