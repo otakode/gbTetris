@@ -15,6 +15,7 @@ wTimeSec: dw ; time in seconds (BCD)
 wUpdateLabel: dw ; current update function
 
 	; Game Screen memory
+wGameMemoryStart:
 wScore: dl ; current Score value (BCD)
 wLevel: db ; current Level value (BCD)
 wLines: dw ; current Lines value (BCD)
@@ -23,6 +24,7 @@ wNextPiece: db ; next Piece
 wBlockMap: ds 2 * 20 ; block map is 10 wide (2 bytes per line) and 20 tall (with 2 hidden lines above the screen)
                      ; stored in reverse order (last line first)
 wBlockMapEnd:
+wGameMemoryEnd:
 
 	; Score Screen memory
 wHighScore:

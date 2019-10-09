@@ -338,8 +338,8 @@ InitGame:
 
 	SET_SPRITE wObject_00, 0, 0, $00, $00
 
-	ld hl, wScore
-	ld bc, wBlockMapEnd - wScore
+	ld hl, wGameMemoryStart
+	ld bc, wGameMemoryEnd - wGameMemoryStart
 	call Memzero
 
 	TOGGLE_FLAG rLCDC, LCDCF_ON
@@ -373,8 +373,9 @@ InitScore:
 	SET_SPRITE wObject_00, BACK_Y_POS, BACK_X_POS, $7F, OAMF_PAL1
 
 	ld hl, wHighScore
+	ld de, InitialHighScore
 	ld bc, wHighScoreEnd - wHighScore
-	call Memzero
+	call Memcpy
 
 COUNT SET 0
 REPT 10
@@ -382,9 +383,15 @@ REPT 10
 	ld de, wHighScore + COUNT * (wHighScore_1 - wHighScore_0)
 	ld bc, 10
 	call Memcpy
+	inc de
+	inc de
+	inc de
 	call BCDToStr
+	dec de
 	call BCDToStr
+	dec de
 	call BCDToStr
+	dec de
 	call BCDToStr
 COUNT SET COUNT + 1
 ENDR

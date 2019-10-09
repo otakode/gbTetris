@@ -127,44 +127,37 @@ TileMapCopy:
 	; @param de ; address of the registry in BCD ; return unchanged
 	; @flags ; a = unit character value ; C = false ; H = true ; N = false ; Z = false
 BCDToStr:
-	ld a, [de]
-	swap a
-	and a, $0F
-	add "0"
-	ldi [hl], a
 
 	ld a, [de]
 	swap a
+REPT 2
 	and a, $0F
 	add "0"
 	ldi [hl], a
+	ld a, [de]
+ENDR
+
 	ret
 	; --- End BCDToStr ---
 
 
 	; --- R8ToHexStr ---
-	; @param hl ; address to write string to (2 chars) ; return address to the character at the start of the string
-	; @param e ; value of the number ; return unchanged
+	; @param hl ; address to write string to (2 chars) ; return address after string
+	; @param d ; value of the number ; return unchanged
 	; @flags ; a = last character ; C = is last character a letter ; H = C ; N = true ; Z = false
 R8ToHexStr:
-	ld a, e
-	swap a
-	and $0F
-	cp $0A
-	jr c, .notHex1
-	add "A" - 10 - "0"
-.notHex1
-	add "0"
-	ldi [hl], a
 
-	ld a, e
+REPT 2
+	swap d
+	ld a, d
 	and $0F
 	cp $0A
-	jr c, .notHex2
+	jr c, .notHex\@
 	add "A" - 10 - "0"
-.notHex2
+.notHex\@
 	add "0"
 	ldi [hl], a
+ENDR
 
 	ret
 	; --- End R8ToHexStr ---
@@ -175,43 +168,9 @@ R8ToHexStr:
 	; @param de ; value of the number ; return unchanged
 	; @flags ; a = last character ; C = is last character a letter ; H = C ; N = true ; Z = false
 R16ToHexStr:
-	ld a, d
-	swap a
-	and $0F
-	cp $0A
-	jr c, .notHex1
-	add "A" - 10 - "0"
-.notHex1
-	add "0"
-	ldi [hl], a
-
-	ld a, d
-	and $0F
-	cp $0A
-	jr c, .notHex2
-	add "A" - 10 - "0"
-.notHex2
-	add "0"
-	ldi [hl], a
-
-	ld a, e
-	swap a
-	and $0F
-	cp $0A
-	jr c, .notHex3
-	add "A" - 10 - "0"
-.notHex3
-	add "0"
-	ldi [hl], a
-
-	ld a, e
-	and $0F
-	cp $0A
-	jr c, .notHex4
-	add "A" - 10 - "0"
-.notHex4
-	add "0"
-	ldi [hl], a
+	call R8ToHexStr
+	ld d, e
+	call R8ToHexStr
 
 	ret
 	; --- End R16ToHexStr ---
