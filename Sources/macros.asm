@@ -63,10 +63,19 @@ ENDM
 
 	; Structure
 SPRITE_OBJECT: MACRO
-.y db
-.x db
-.tile db
+.y     db
+.x     db
+.tile  db
 .flags db
+ENDM
+
+
+	; SPRITE_DATA <YPosition>, <XPosition>, <TileID>, <Flags>
+SPRITE_DATA: MACRO
+.y     db \1
+.x     db \2
+.tile  db \3
+.flags db \4
 ENDM
 
 
@@ -84,7 +93,27 @@ ENDM
 
 
 	; Structure
+PIECE_OBJECT: MACRO
+REPT 4
+.block_\@ SPRITE_OBJECT
+ENDR
+ENDM
+
+
+	; PIECE_DATA <>
+PIECE_DATA: MACRO
+ENDM
+
+
+	; Structure
 HIGHSCORE_OBJECT: MACRO
 .name  ds 10
 .score dl
+ENDM
+
+
+	; HIGHSCORE_DATA <name>, <score>
+HIGHSCORE_DATA: MACRO
+.name  db \1
+.score dl \2
 ENDM

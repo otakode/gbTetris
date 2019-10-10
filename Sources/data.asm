@@ -1,4 +1,7 @@
 
+SECTION "TileSets", ROM0
+
+
 ; --- TileSets ---
 
 INCLUDE "../TileSet/OtakodeLogoTileSet.z80"
@@ -11,6 +14,9 @@ INCLUDE "../TileSet/TetrisTileSet.z80"
 TetrisTileSetEnd:
 
 ; --- End TileSets ---
+
+
+SECTION "TileMaps", ROM0
 
 
 ; --- TileMaps ---
@@ -33,30 +39,43 @@ ScoreTileMapEnd:
 ; --- End TileMaps ---
 
 
+SECTION "Game Data", ROM0
+
+
 ; --- GameData ---
+
+Pieces:
+.L: db 1
+.J: db 2
+.S: db 3
+.Z: db 4
+.O: db 5
+.T: db 6
+.I: db 7
+PiecesEnd:
 
 InitialHighScore:
 CHARMAP " ", 0
-db "First     "
-dl $12345678
-db "Second    "
-dl $23456789
-db "Third     "
-dl $34567890
-db "Fourth    "
-dl $45678901
-db "Fifth     "
-dl $56789012
-db "Sixth     "
-dl $67890123
-db "Seventh   "
-dl $78901234
-db "Eighth    "
-dl $89012345
-db "Ninth     "
-dl $90123456
-db "Tenth     "
-dl $01234567
+First:
+	HIGHSCORE_DATA "First     ", $10000000
+Second:
+	HIGHSCORE_DATA "Second    ", $05000000
+Third:
+	HIGHSCORE_DATA "Third     ", $01000000
+Fourth:
+	HIGHSCORE_DATA "Fourth    ", $00500000
+Fifth:
+	HIGHSCORE_DATA "Fifth     ", $00100000
+Sixth:
+	HIGHSCORE_DATA "Sixth     ", $00050000
+Seventh:
+	HIGHSCORE_DATA "Seventh   ", $00010000
+Eighth:
+	HIGHSCORE_DATA "Eighth    ", $00005000
+Ninth:
+	HIGHSCORE_DATA "Ninth     ", $00001000
+Tenth:
+	HIGHSCORE_DATA "Tenth     ", $00000100
 InitialHighScoreEnd:
 
 ; --- End GameData ---
