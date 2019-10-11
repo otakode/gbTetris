@@ -61,6 +61,16 @@ TEST_INPUT: MACRO
 ENDM
 
 
+STRUCT: MACRO
+SET STRUCT_NAME \1
+ENDM
+
+
+STRUCT_MEMBER: MACRO
+STRUCT_NAME\1
+ENDM
+
+
 	; Structure
 SPRITE_OBJECT: MACRO
 .y     db
@@ -94,14 +104,35 @@ ENDM
 
 	; Structure
 PIECE_OBJECT: MACRO
-REPT 4
-.block_\@ SPRITE_OBJECT
-ENDR
+.block_0  SPRITE_OBJECT
+.block_1  SPRITE_OBJECT
+.block_2  SPRITE_OBJECT
+.block_3  SPRITE_OBJECT
+.previous dw
+.next     dw
 ENDM
 
 
 	; PIECE_DATA <>
 PIECE_DATA: MACRO
+.block_0 SPRITE_DATA \1 \2 \3 \4
+REPT 4
+SHIFT
+ENDR
+.block_1 SPRITE_DATA \1 \2 \3 \4
+REPT 4
+SHIFT
+ENDR
+.block_2 SPRITE_DATA \1 \2 \3 \4
+REPT 4
+SHIFT
+ENDR
+.block_3 SPRITE_DATA \1 \2 \3 \4
+REPT 4
+SHIFT
+ENDR
+.previous dw \1
+.next     dw \2
 ENDM
 
 
