@@ -85,22 +85,25 @@ ENDM
 
 
 	; Structure
-SPRITE_OBJECT: MACRO
+SPRITE_STRUCT: MACRO
 	STRUCT \1
-	MEMBER y,     db
-	MEMBER x,     db
-	MEMBER tile,  db
-	MEMBER flags, db
+	MEMBER y,     \2
+	MEMBER x,     \3
+	MEMBER tile,  \4
+	MEMBER flags, \5
 	STRUCT_END
+ENDM
+
+
+	; Structure
+SPRITE_OBJECT: MACRO
+	SPRITE_STRUCT \1, db, db, db, db
 ENDM
 
 
 	; SPRITE_DATA <YPosition>, <XPosition>, <TileID>, <Flags>
 SPRITE_DATA: MACRO
-.y     db \1
-.x     db \2
-.tile  db \3
-.flags db \4
+	SPRITE_STRUCT \1, db \2, db \3, db \4, db \5
 ENDM
 
 
@@ -118,16 +121,23 @@ ENDM
 
 
 	; Structure
-PIECE_OBJECT: MACRO
+PIECE_STRUCT: MACRO
 	STRUCT \1
-	MEMBER previous, db
-	MEMBER next, db
+	MEMBER previous, \2
+	MEMBER next,     \3
 	STRUCT_END
+ENDM
+
+
+	; Structure
+PIECE_OBJECT: MACRO
+	PIECE_STRUCT \1, dw, dw
 ENDM
 
 
 	; PIECE_DATA <>
 PIECE_DATA: MACRO
+	PIECE_STRUCT \1, dw \2, dw \3
 ENDM
 
 

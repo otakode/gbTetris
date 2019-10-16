@@ -349,8 +349,9 @@ InitGame:
 
 	; --- UpdateGame ---
 UpdateGame:
-	HALT_FRAMES 120
+	TEST_INPUT wInputPress, PADF_UP, .notGameOver
 	call InitScore
+.notGameOver
 	ret
 	; --- End UpdateGame ---
 
