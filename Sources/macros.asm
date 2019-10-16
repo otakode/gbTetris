@@ -63,7 +63,8 @@ ENDM
 
 STRUCT: MACRO
 STRUCT_NAME EQUS "\1"
-PRINTT "Struct: {STRUCT_NAME}\n"
+;PRINTT "Struct: {STRUCT_NAME}\n"
+STRUCT_NAME
 ENDM
 
 
@@ -74,21 +75,23 @@ ENDM
 
 MEMBER: MACRO
 MEMBER_NAME EQUS "\1"
-PRINTT "Member: {MEMBER_NAME}\n"
-FULL_NAME EQUS "{STRUCT_NAME}_{MEMBER_NAME}"
-PRINTT "Label: {FULL_NAME}\n"
-	;\2; define content
-PURGE FULL_NAME
+;PRINTT "Member: {MEMBER_NAME}\n"
+LABEL_NAME EQUS "{STRUCT_NAME}_{MEMBER_NAME}"
+;PRINTT "Label: {LABEL_NAME}\n"
+LABEL_NAME \2
+PURGE LABEL_NAME
 PURGE MEMBER_NAME
 ENDM
 
 
 	; Structure
 SPRITE_OBJECT: MACRO
-.y     db
-.x     db
-.tile  db
-.flags db
+	STRUCT \1
+	MEMBER y,     db
+	MEMBER x,     db
+	MEMBER tile,  db
+	MEMBER flags, db
+	STRUCT_END
 ENDM
 
 
@@ -104,20 +107,21 @@ ENDM
 	; SET_SPRITE <SpriteName>, <YPosition>, <XPosition>, <TileID>, <Flags>
 SET_SPRITE: MACRO
 	ld a, \2
-	ld [\1.y], a
+	ld [\1], a
 	ld a, \3
-	ld [\1.x], a
+	ld [\1 + 1], a
 	ld a, \4
-	ld [\1.tile], a
+	ld [\1 + 2], a
 	ld a, \5
-	ld [\1.flags], a
+	ld [\1 + 3], a
 ENDM
 
 
 	; Structure
 PIECE_OBJECT: MACRO
 	STRUCT \1
-	MEMBER previous db
+	MEMBER previous, db
+	MEMBER next, db
 	STRUCT_END
 ENDM
 

@@ -201,7 +201,7 @@ InitTitle:
 
 	; --- UpdateTitle ---
 UpdateTitle:
-	ld a, [wObject_00.y]
+	ld a, [wObject_00_y]
 	sub OPTION_Y_POS
 	jr z, .options
 
@@ -212,7 +212,7 @@ UpdateTitle:
 .notStart
 	TEST_INPUT wInputPress, PADF_DOWN, .afterDown
 	ld a, OPTION_Y_POS
-	ld [wObject_00.y], a
+	ld [wObject_00_y], a
 .afterDown
 	ret
 
@@ -223,7 +223,7 @@ UpdateTitle:
 .notOptions
 	TEST_INPUT wInputPress, PADF_UP, .afterUp
 	ld a, START_Y_POS
-	ld [wObject_00.y], a
+	ld [wObject_00_y], a
 .afterUp
 	ret
 	; --- End UpdateTitle ---
@@ -258,7 +258,7 @@ InitOptions:
 
 	; --- UpdateOptions ---
 UpdateOptions:
-	ld a, [wObject_00.y]
+	ld a, [wObject_00_y]
 	cp SOUND_Y_POS
 	jr z, .sfx
 	cp BACK_Y_POS
@@ -275,8 +275,8 @@ UpdateOptions:
 	ret
 .toMusic
 	ld a, MUSIC_Y_POS
-	ld [wObject_00.y], a
-	ld [wObject_01.y], a
+	ld [wObject_00_y], a
+	ld [wObject_01_y], a
 	ret
 
 .sfx
@@ -293,12 +293,12 @@ UpdateOptions:
 	ret
 .toSfx
 	ld a, SOUND_Y_POS
-	ld [wObject_00.y], a
-	ld [wObject_01.y], a
+	ld [wObject_00_y], a
+	ld [wObject_01_y], a
 	ld a, LEFT_X_POS
-	ld [wObject_00.x], a
+	ld [wObject_00_x], a
 	ld a, OAMF_XFLIP
-	ld [wObject_00.flags], a
+	ld [wObject_00_flags], a
 	ret
 
 .back
@@ -312,13 +312,13 @@ UpdateOptions:
 	ret
 .toBack
 	ld a, BACK_Y_POS
-	ld [wObject_00.y], a
+	ld [wObject_00_y], a
 	ld a, BACK_X_POS
-	ld [wObject_00.x], a
+	ld [wObject_00_x], a
 	ld a, OAMF_PAL1
-	ld [wObject_00.flags], a
+	ld [wObject_00_flags], a
 	ld a, 0 ; move right arrow off screen
-	ld [wObject_01.y], a
+	ld [wObject_01_y], a
 	ret
 	; --- End UpdateOptions ---
 
