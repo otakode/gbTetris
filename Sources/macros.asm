@@ -121,23 +121,15 @@ ENDM
 
 
 	; Structure
-PIECE_STRUCT: MACRO
-	STRUCT \1
-	MEMBER previous, \2
-	MEMBER next,     \3
-	STRUCT_END
-ENDM
-
-
-	; Structure
-PIECE_OBJECT: MACRO
-	PIECE_STRUCT \1, dw, dw
-ENDM
-
-
-	; PIECE_DATA <>
+	; blocks represent the 4 blocks of the piece
+	; value represent tile ID, X and Y offsets 
+	; encoded 4 bits of tile and 2 bits per offsets %YYXXTTTT
 PIECE_DATA: MACRO
-	PIECE_STRUCT \1, dw \2, dw \3
+	STRUCT \1
+	MEMBER previous, dw \2
+	MEMBER next,     dw \3
+	MEMBER blocks,   db \4, \5, \6, \7
+	STRUCT_END
 ENDM
 
 

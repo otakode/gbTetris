@@ -341,6 +341,8 @@ InitGame:
 	ld hl, wGameMemoryStart
 	ld bc, wGameMemoryEnd - wGameMemoryStart
 	call Memzero
+	LOAD_ADDRESS wPiece, L1
+	LOAD_ADDRESS wNextPiece, L0
 
 	TOGGLE_FLAG rLCDC, LCDCF_ON
 	ret
@@ -406,7 +408,6 @@ ENDR
 UpdateScore:
 	TEST_INPUT wInputPress, PADF_A, .notBack
 	call InitTitle
-	ret
 .notBack
 	ret
 	; --- End UpdateScore ---
