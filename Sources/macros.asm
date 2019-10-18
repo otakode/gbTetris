@@ -78,7 +78,7 @@ MEMBER_NAME EQUS "\1"
 ;PRINTT "Member: {MEMBER_NAME}\n"
 LABEL_NAME EQUS "{STRUCT_NAME}_{MEMBER_NAME}"
 ;PRINTT "Label: {LABEL_NAME}\n"
-LABEL_NAME \2
+LABEL_NAME
 PURGE LABEL_NAME
 PURGE MEMBER_NAME
 ENDM
@@ -87,10 +87,14 @@ ENDM
 	; Structure
 SPRITE_STRUCT: MACRO
 	STRUCT \1
-	MEMBER y,     \2
-	MEMBER x,     \3
-	MEMBER tile,  \4
-	MEMBER flags, \5
+	MEMBER y
+	\2
+	MEMBER x
+	\3
+	MEMBER tile
+	\4
+	MEMBER flags
+	\5
 	STRUCT_END
 ENDM
 
@@ -126,9 +130,15 @@ ENDM
 	; encoded 4 bits of tile and 2 bits per offsets %YYXXTTTT
 PIECE_DATA: MACRO
 	STRUCT \1
-	MEMBER previous, dw \2
-	MEMBER next,     dw \3
-	MEMBER blocks,   db \4, \5, \6, \7
+	MEMBER previous
+	dw \2
+	MEMBER next
+	dw \3
+	MEMBER blocks
+	db \4
+	db \5
+	db \6
+	db \7
 	STRUCT_END
 ENDM
 

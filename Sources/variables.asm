@@ -19,6 +19,9 @@ wGameMemoryStart:
 wScore: dl ; current Score value (BCD)
 wLevel: db ; current Level value (BCD)
 wLines: dw ; current Lines value (BCD)
+wPiecePos:
+wPiecePos_y: db ; y position of the piece
+wPiecePos_x: db ; x position of the piece
 wPiece: dw ; current Piece (Rom address)
 wNextPiece: dw ; next Piece
 wBlockMap: ds 2 * 20 ; block map is 10 wide (2 bytes per line) and 20 tall (with 2 hidden lines above the screen)

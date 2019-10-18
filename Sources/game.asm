@@ -341,6 +341,10 @@ InitGame:
 	ld hl, wGameMemoryStart
 	ld bc, wGameMemoryEnd - wGameMemoryStart
 	call Memzero
+	ld a, Y_POS 7
+	ld [wPiecePos_y], a
+	ld a, X_POS 5
+	ld [wPiecePos_x], a
 	LOAD_ADDRESS wPiece, L1
 	LOAD_ADDRESS wNextPiece, L0
 
@@ -351,11 +355,91 @@ InitGame:
 
 	; --- UpdateGame ---
 UpdateGame:
+	call UpdatePiece
+	
+
+	TEST_INPUT wInputPress, PADF_B, .notB
+	ld b, 0
+	call TurnPiece
+	ret
+.notB
+	TEST_INPUT wInputPress, PADF_A, .notA
+	ld b, 1
+	call TurnPiece
+	ret
+.notA
 	TEST_INPUT wInputPress, PADF_UP, .notGameOver
 	call InitScore
 .notGameOver
 	ret
 	; --- End UpdateGame ---
+
+
+	; --- TurnPiece ---
+	; @param b ; 1 to turn right, 0 to turn left
+TurnPiece:
+	sla b ; 2 or 0
+
+	ld a, [wPiece]
+	add b
+	ld l, a
+	ld a, [wPiece + 1]
+	adc 0
+	ld h, a
+
+	ldi a, [hl]
+	ld [wPiece], a
+	ld a, [hl]
+	ld [wPiece + 1], a
+
+	ret
+	; --- End TurnPiece ---
+
+
+	; --- UpdatePiece
+UpdatePiece:
+
+	ld a, [wPiece]
+	add (L0_blocks - L0)
+	ld l, a
+	ld a, [wPiece + 1]
+	adc 0
+	ld h, a
+
+SPRITE_PTR SET $C100
+REPT 4
+	push hl
+
+	ld a, [hl]
+	and $C0
+	srl a
+	srl a
+	srl a ; YY00 0000 -> 000Y Y000 ; shift and multiply by 8
+	ld hl, wPiecePos_y
+	add [hl]
+	ld [SPRITE_PTR + 0], a
+
+	pop hl
+	push hl
+
+	ld a, [hl]
+	and $30
+	rrca ; 00XX 0000 -> 000X X000 ; shift and multiply by 8
+	ld hl, wPiecePos_x
+	add [hl]
+	ld [SPRITE_PTR + 1], a
+
+	pop hl
+
+	ldi a, [hl]
+	and $0F
+	ld [SPRITE_PTR + 2], a
+
+SPRITE_PTR SET SPRITE_PTR + (wObject_01 - wObject_00)
+ENDR
+
+	ret
+	; --- End UpdatePiece ---
 
 
 BACK_Y_POS SET Y_POS 15
