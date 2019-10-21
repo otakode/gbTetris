@@ -51,7 +51,7 @@ Memzero:
 	or c
 	jr nz, Memzero
 	ret
-	; --- End Memcpy ---
+	; --- End Memzero ---
 
 
 	; --- Memcpy ---
@@ -174,3 +174,14 @@ R16ToHexStr:
 
 	ret
 	; --- End R16ToHexStr ---
+
+
+	; --- RNG ---
+	; @flags ; a = RNG number ; C = ; H = ; N = ; Z =
+RNG:
+	ld a, [wRNG]
+	ld hl, rDIV
+	xor [hl]
+	ld [wRNG], a
+	ret
+	; --- end RNG ---
