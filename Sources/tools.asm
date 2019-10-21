@@ -182,6 +182,7 @@ RNG:
 	ld a, [wRNG]
 	ld hl, rDIV
 	xor [hl]
+	cpl
 	ld [wRNG], a
 	ret
 	; --- end RNG ---

@@ -73,6 +73,8 @@ Init:
 	ld [wTimeSec], a
 	ld [wTimeSec + 1], a
 
+	ld [wRNG], a
+
 	; set Timer to 16Hz interruptions (lowest possible)
 	SET_FLAG rTMA, $00 ; overflow at 256th timer frequency
 	SET_FLAG rTAC, TACF_4KHZ
@@ -343,10 +345,14 @@ InitGame:
 	call Memzero
 	ld a, Y_POS 7
 	ld [wPiecePos_y], a
-	ld a, X_POS 5
+	ld a, X_POS 4
 	ld [wPiecePos_x], a
-	LOAD_ADDRESS wPiece, L1
-	LOAD_ADDRESS wNextPiece, L0
+
+	ld hl, wPiece
+	ld bc, 2 * (wNextPiece - wPiece)
+	call Memzero
+	call ChangePiece
+	call ChangePiece
 
 	TOGGLE_FLAG rLCDC, LCDCF_ON
 	ret
@@ -355,9 +361,34 @@ InitGame:
 
 	; --- UpdateGame ---
 UpdateGame:
-	call UpdatePiece
-	
 
+	TEST_INPUT wInputPress, PADF_DOWN, .notDown
+	call ChangePiece
+.notDown
+
+	ld a, [wPiece]
+	ld l, a
+	ld a, [wPiece + 1]
+	ld h, a
+	ld de, wObject_00
+	ld a, [wPiecePos_y]
+	ld b, a
+	ld a, [wPiecePos_x]
+	ld c, a
+	call UpdatePiece
+
+	ld a, [wNextPiece]
+	ld l, a
+	ld a, [wNextPiece + 1]
+	ld h, a
+	; de is already pointing to wObject_04
+	ld a, Y_POS 13
+	ld b, a
+	ld a, X_POS 14
+	ld c, a
+	call UpdatePiece
+
+	; interactions
 	TEST_INPUT wInputPress, PADF_B, .notB
 	ld b, 0
 	call TurnPiece
@@ -368,6 +399,8 @@ UpdateGame:
 	call TurnPiece
 	ret
 .notA
+
+	; Gameover check
 	TEST_INPUT wInputPress, PADF_UP, .notGameOver
 	call InitScore
 .notGameOver
@@ -396,46 +429,69 @@ TurnPiece:
 	; --- End TurnPiece ---
 
 
+	; --- ChangePiece ---
+ChangePiece:
+	ld a, [wNextPiece]
+	ld [wPiece], a
+	ld a, [wNextPiece + 1]
+	ld [wPiece + 1], a
+
+	call RNG
+	and %1110
+	add LOW(PieceTable)
+	ld l, a
+	ld a, HIGH(PieceTable)
+	adc 0
+	ld h, a
+	ldi a, [hl]
+	ld [wNextPiece], a
+	ld a, [hl]
+	ld [wNextPiece + 1], a
+
+	ret
+	; --- End ChangePiece ---
+
+
 	; --- UpdatePiece
+	; @param hl ; address of the piece data
+	; @param de ; address of the first of the 4 sprites
+	; @param b, c ; b=y and c=x position of the piece
 UpdatePiece:
 
-	ld a, [wPiece]
-	add (L0_blocks - L0)
+	ld a, l
+	add (L0_blocks - L0) ; blocks offset
 	ld l, a
-	ld a, [wPiece + 1]
+	ld a, h
 	adc 0
 	ld h, a
 
-SPRITE_PTR SET $C100
 REPT 4
-	push hl
-
 	ld a, [hl]
 	and $C0
 	srl a
 	srl a
 	srl a ; YY00 0000 -> 000Y Y000 ; shift and multiply by 8
-	ld hl, wPiecePos_y
-	add [hl]
-	ld [SPRITE_PTR + 0], a
-
-	pop hl
-	push hl
+	add b
+	ld [de], a
+	inc de
 
 	ld a, [hl]
 	and $30
 	rrca ; 00XX 0000 -> 000X X000 ; shift and multiply by 8
-	ld hl, wPiecePos_x
-	add [hl]
-	ld [SPRITE_PTR + 1], a
-
-	pop hl
+	add c
+	ld [de], a
+	inc de
 
 	ldi a, [hl]
 	and $0F
-	ld [SPRITE_PTR + 2], a
+	ld [de], a
 
-SPRITE_PTR SET SPRITE_PTR + (wObject_01 - wObject_00)
+	ld a, e
+	add a, (wObject_01 - wObject_00) - 2 ; -2 for the already incremented de
+	ld e, a
+	ld a, d
+	adc 0
+	ld d, a
 ENDR
 
 	ret
@@ -458,6 +514,10 @@ InitScore:
 	call TileMapCopy
 
 	SET_SPRITE wObject_00, BACK_Y_POS, BACK_X_POS, $7F, OAMF_PAL1
+
+	ld hl, wObject_01
+	ld bc, wObject_08 - wObject_01
+	call Memzero
 
 	ld hl, wHighScore
 	ld de, InitialHighScore

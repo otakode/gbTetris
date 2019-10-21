@@ -7,6 +7,9 @@ wLastInputState: db ; state from the last frame
 wInputPress:     db ; input bits set if pressed this frame
 wInputRelease:   db ; input bits set if released this frame
 
+	; RNG
+wRNG db;
+
 	; Time
 wTimerIECounter: db ; counter for Timer Interruptions
 wTimeSec:        dw ; time in seconds (BCD)
