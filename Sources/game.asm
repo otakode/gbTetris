@@ -366,6 +366,32 @@ UpdateGame:
 	call ChangePiece
 .notDown
 
+	; Score
+	ld hl, _SCRN0 + 3 * SCRN_VX_B + 12
+	ld de, wScore + 3
+	call BCDToStr
+	dec de
+	call BCDToStr
+	dec de
+	call BCDToStr
+	dec de
+	call BCDToStr
+
+	; Level
+	ld hl, _SCRN0 + 7 * SCRN_VX_B + 14
+	ld de, wLevel + 1
+	call BCDToStr
+	dec de
+	call BCDToStr
+
+	; Lines
+	ld hl, _SCRN0 + 10 * SCRN_VX_B + 14
+	ld de, wLines + 1
+	call BCDToStr
+	dec de
+	call BCDToStr
+
+	; Piece
 	ld a, [wPiece]
 	ld l, a
 	ld a, [wPiece + 1]
@@ -377,6 +403,7 @@ UpdateGame:
 	ld c, a
 	call UpdatePiece
 
+	; Next Piece
 	ld a, [wNextPiece]
 	ld l, a
 	ld a, [wNextPiece + 1]
@@ -388,7 +415,7 @@ UpdateGame:
 	ld c, a
 	call UpdatePiece
 
-	; interactions
+	; Rotations
 	TEST_INPUT wInputPress, PADF_B, .notB
 	ld b, 0
 	call TurnPiece
@@ -401,7 +428,7 @@ UpdateGame:
 .notA
 
 	; Gameover check
-	TEST_INPUT wInputPress, PADF_UP, .notGameOver
+	TEST_INPUT wInputPress, PADF_START, .notGameOver
 	call InitScore
 .notGameOver
 	ret
