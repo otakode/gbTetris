@@ -366,6 +366,19 @@ UpdateGame:
 	call ChangePiece
 .notDown
 
+	; Rotations
+	TEST_INPUT wInputPress, PADF_B, .notB
+	ld b, 0
+	call TurnPiece
+	jr .display
+.notB
+	TEST_INPUT wInputPress, PADF_A, .notA
+	ld b, 1
+	call TurnPiece
+	;jr .display
+.notA
+
+.display
 	; Score
 	ld hl, _SCRN0 + 3 * SCRN_VX_B + 12
 	ld de, wScore + 3
@@ -414,18 +427,6 @@ UpdateGame:
 	ld a, X_POS 14
 	ld c, a
 	call UpdatePiece
-
-	; Rotations
-	TEST_INPUT wInputPress, PADF_B, .notB
-	ld b, 0
-	call TurnPiece
-	ret
-.notB
-	TEST_INPUT wInputPress, PADF_A, .notA
-	ld b, 1
-	call TurnPiece
-	ret
-.notA
 
 	; Gameover check
 	TEST_INPUT wInputPress, PADF_START, .notGameOver
