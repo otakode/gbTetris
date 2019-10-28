@@ -20,17 +20,17 @@ ENDM
 WAIT_VBLANK: MACRO
 .waitVBlank\@
 	ld a, [rLY]
-	cp SCRN_Y
+	sub SCRN_Y
 	jr c, .waitVBlank\@
 ENDM
 
 
 HALT_VBLANK: MACRO
-.waitVBlank\@
+.haltVBlank\@
 	Halt
-	ld a, [rIF]
-	cp IEF_VBLANK
-	jr z, .waitVBlank\@
+	ld a, [rLY]
+	sub SCRN_Y
+	jr c, .haltVBlank\@
 ENDM
 
 
