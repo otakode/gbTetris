@@ -1,6 +1,9 @@
 
 SECTION "Variables", WRAM0
 
+	; Interrupts
+wInterrupts:     db ; interrupt bit set when served
+
 	; Inputs
 wInputState:     db ; input bits set if a button is down
 wLastInputState: db ; state from the last frame
@@ -19,15 +22,15 @@ wUpdateLabel: dw ; current update function address
 
 	; Game Screen memory
 wGameMemoryStart:
-wScore: dl ; current Score value (BCD)
-wLevel: db ; current Level value (BCD)
-wLines: dw ; current Lines value (BCD)
+wScore:      dl ; current Score value (BCD)
+wLevel:      db ; current Level value (BCD)
+wLines:      dw ; current Lines value (BCD)
 wPiecePos:
 wPiecePos_y: db ; y position of the piece
 wPiecePos_x: db ; x position of the piece
-wPiece: dw ; current Piece (Rom address)
-wNextPiece: dw ; next Piece
-wBlockMap: ds 2 * 20 ; block map is 10 wide (2 bytes per line) and 20 tall (with 2 hidden lines above the screen)
+wPiece:      dw ; current Piece (Rom address)
+wNextPiece:  dw ; next Piece
+wBlockMap:   ds 2 * 20 ; block map is 10 wide (2 bytes per line) and 20 tall (with 2 hidden lines above the screen)
                      ; stored in reverse order (last line first)
 wBlockMapEnd:
 wGameMemoryEnd:

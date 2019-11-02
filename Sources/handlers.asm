@@ -3,6 +3,11 @@ SECTION "Interruption Handlers", ROM0
 
 	; --- ProcessVBlank ---
 ProcessVBlank:
+	ld a, [wInterrupts]
+	or IEF_VBLANK
+	ld [wInterrupts], a
+	ld a, HIGH(wObjects) ; 2 bytes
+	call hOAMDMA ; 3 bytes
 	ret
 	; --- End ProcessVBlank ---
 

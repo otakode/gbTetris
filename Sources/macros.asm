@@ -28,9 +28,10 @@ ENDM
 HALT_VBLANK: MACRO
 .haltVBlank\@
 	Halt
-	ld a, [rLY]
-	sub SCRN_Y
-	jr c, .haltVBlank\@
+	ld a, [wInterrupts]
+	and IEF_VBLANK
+	jr z, .haltVBlank\@
+	TOGGLE_FLAG wInterrupts, IEF_VBLANK
 ENDM
 
 

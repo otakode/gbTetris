@@ -3,8 +3,7 @@ SECTION "VBlank Interrupt", ROM0[$0040]
 
 VBlankInterrupt:
 	push af ; 1 byte
-	ld a, HIGH(wObjects) ; 2 bytes
-	call hOAMDMA ; 3 bytes
+	call ProcessVBlank
 	pop af ; 1 byte
 	reti ; 1 byte
 

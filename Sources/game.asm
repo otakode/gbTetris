@@ -12,6 +12,9 @@ Splash:
 	ld a, HIGH(wObjects)
 	call hOAMDMA
 
+	; Init Interrupts
+	xor a
+	ld [wInterrupts], a
 	SET_FLAG rIE, IEF_VBLANK
 	ei
 
@@ -73,6 +76,7 @@ Init:
 	ld [wTimeSec], a
 	ld [wTimeSec + 1], a
 
+	; Init RNG
 	ld [wRNG], a
 
 	; set Timer to 16Hz interruptions (lowest possible)
