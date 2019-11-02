@@ -347,7 +347,7 @@ InitGame:
 	ld hl, wGameMemoryStart
 	ld bc, wGameMemoryEnd - wGameMemoryStart
 	call Memzero
-	ld a, Y_POS 7
+	ld a, Y_POS 0
 	ld [wPiecePos_y], a
 	ld a, X_POS 4
 	ld [wPiecePos_x], a
@@ -366,21 +366,44 @@ InitGame:
 	; --- UpdateGame ---
 UpdateGame:
 
-	TEST_INPUT wInputPress, PADF_DOWN, .notDown
+	ld a, [wPiecePos_y]
+	inc a
+	cp Y_POS 16
+	jr c, .notBottom
 	call ChangePiece
-.notDown
+	ld a, X_POS 4
+	ld [wPiecePos_x], a
+	xor a
+.notBottom
+	ld [wPiecePos_y], a
 
 	; Rotations
 	TEST_INPUT wInputPress, PADF_B, .notB
 	ld b, 0
 	call TurnPiece
-	jr .display
+	jr .afterTurn
 .notB
 	TEST_INPUT wInputPress, PADF_A, .notA
 	ld b, 1
 	call TurnPiece
-	;jr .display
+	;jr .afterTurn
 .notA
+.afterTurn
+
+	; Move
+	TEST_INPUT wInputState, PADF_LEFT, .notLeft
+	ld a, [wPiecePos_x]
+	dec a
+	ld [wPiecePos_x], a
+	jr .afterMove
+.notLeft
+	TEST_INPUT wInputState, PADF_RIGHT, .notRight
+	ld a, [wPiecePos_x]
+	inc a
+	ld [wPiecePos_x], a
+	;jr .afterMove
+.notRight
+.afterMove
 
 .display
 	; Score
