@@ -3,9 +3,12 @@ SECTION "Interruption Handlers", ROM0
 
 	; --- ProcessVBlank ---
 ProcessVBlank:
+	; update wInterrupts
 	ld a, [wInterrupts]
 	or IEF_VBLANK
 	ld [wInterrupts], a
+
+	; call DMA
 	ld a, HIGH(wObjects) ; 2 bytes
 	call hOAMDMA ; 3 bytes
 	ret
@@ -17,6 +20,10 @@ ProcessVBlank:
 
 	; --- ProcessTimer ---
 ProcessTimer:
+	ld a, [wInterrupts]
+	or IEF_TIMER
+	ld [wInterrupts], a
+
 	; increment interrupt counter
 	ld a, [wTimerIECounter]
 	inc a
