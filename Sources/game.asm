@@ -391,16 +391,33 @@ UpdateGame:
 .afterTurn
 
 	; Move
+	ld a, [wXoffset]
+	cp a, 0
+	jr z, .notMoving
+	cp a, 127
+	jr nc, .neg
+	sub 2
+	ld [wXoffset], a
+	jr .afterMove
+.neg
+	add 2
+	ld [wXoffset], a
+	jr .afterMove
+.notMoving
 	TEST_INPUT wInputState, PADF_LEFT, .notLeft
 	ld a, [wPiecePos_x]
-	dec a
+	sub 8
 	ld [wPiecePos_x], a
+	ld a, 8
+	ld [wXoffset], a
 	jr .afterMove
 .notLeft
 	TEST_INPUT wInputState, PADF_RIGHT, .notRight
 	ld a, [wPiecePos_x]
-	inc a
+	add 8
 	ld [wPiecePos_x], a
+	ld a, -8
+	ld [wXoffset], a
 	;jr .afterMove
 .notRight
 .afterMove
@@ -439,7 +456,13 @@ UpdateGame:
 	ld de, wObject_00
 	ld a, [wPiecePos_y]
 	ld b, a
+	ld a, [wYoffset]
+	add b
+	ld b, a
 	ld a, [wPiecePos_x]
+	ld c, a
+	ld a, [wXoffset]
+	add c
 	ld c, a
 	call UpdatePiece
 

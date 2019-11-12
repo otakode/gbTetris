@@ -11,7 +11,7 @@ wInputPress:     db ; input bits set if pressed this frame
 wInputRelease:   db ; input bits set if released this frame
 
 	; RNG
-wRNG db;
+wRNG: db;
 
 	; Time
 wTimerIECounter: db ; counter for Timer Interruptions
@@ -25,6 +25,8 @@ wGameMemoryStart:
 wScore:      dl ; current Score value (BCD)
 wLevel:      db ; current Level value (BCD)
 wLines:      dw ; current Lines value (BCD)
+wYoffset:    db ; Y offset of the piece to its physical position
+wXoffset:    db ; X offset of the piece to its physical position
 wPiecePos:
 wPiecePos_y: db ; y position of the piece
 wPiecePos_x: db ; x position of the piece
